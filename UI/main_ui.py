@@ -1,5 +1,37 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+"""
+Custom QLabel
+Used to hold a image
+
+Functions as the drag and drop box for user to upload images
+"""
+class MyQLabel(QtWidgets.QLabel):
+        def __init__(self, Form):
+            super().__init__(Form)
+            self.setAcceptDrops(True)
+
+        def dragEnterEvent(self, event):
+            event.accept() if event.mimeData().hasImage else event.ignore()
+    
+        def dragMoveEvent(self, event):
+            event.accept() if event.mimeData().hasImage else event.ignore()
+    
+        def dropEvent(self, event):
+            if event.mimeData().hasImage:
+                event.setDropAction(QtCore.Qt.CopyAction)
+                file_path = event.mimeData().urls()[0].toLocalFile()
+                print(file_path)
+                self.setPixmap(QtGui.QPixmap(file_path))
+    
+                event.accept()
+            else:
+                event.ignore()
+
+"""
+The first page of the User Interface
+Do not edit unless you know what's up
+"""                
 class Ui_FormOne(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
@@ -8,11 +40,12 @@ class Ui_FormOne(QtWidgets.QWidget):
         Form.resize(980, 550)
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.imageUpload = QtWidgets.QLabel(Form)
+        self.imageUpload = MyQLabel(Form)
         self.imageUpload.setText("")
         self.imageUpload.setPixmap(QtGui.QPixmap(".\\Screenshot (106).png"))
         self.imageUpload.setScaledContents(True)
         self.imageUpload.setObjectName("imageUpload")
+        self.imageUpload.setMaximumSize(QtCore.QSize(1900, 1000))
         self.gridLayout_2.addWidget(self.imageUpload, 0, 0, 1, 2)
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
@@ -71,6 +104,10 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.inputConfigLabel.setText(_translate("Form", "INPUT CONFIGURATION"))
         self.learnButton.setText(_translate("Form", "Learn More"))
 
+"""
+The second page of the User Interface
+Do not edit unless you know what's up
+"""
 class Ui_FormTwo(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
