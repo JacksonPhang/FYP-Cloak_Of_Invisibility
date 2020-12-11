@@ -9,6 +9,7 @@ Functions as the drag and drop box for user to upload images
 class MyQLabel(QtWidgets.QLabel):
         def __init__(self, Form):
             super().__init__(Form)
+            self._parent = Form
             self.setAcceptDrops(True)
 
         def dragEnterEvent(self, event):
@@ -23,6 +24,7 @@ class MyQLabel(QtWidgets.QLabel):
                 file_path = event.mimeData().urls()[0].toLocalFile()
                 print(file_path)
                 self.setPixmap(QtGui.QPixmap(file_path))
+                self._parent.setFilePath(file_path)
     
                 event.accept()
             else:
@@ -40,7 +42,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         Form.resize(980, 550)
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.imageUpload = MyQLabel(Form)
+        self.imageUpload = MyQLabel(self)
         self.imageUpload.setText("")
         self.imageUpload.setPixmap(QtGui.QPixmap(".\\Screenshot (106).png"))
         self.imageUpload.setScaledContents(True)
@@ -62,6 +64,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.gridLayout.addItem(spacerItem, 3, 0, 1, 2)
         self.browseButton = QtWidgets.QPushButton(Form)
         self.browseButton.setObjectName("browseButton")
+        self.browseButton.clicked.connect(self.browseButtonFunction)
         self.gridLayout.addWidget(self.browseButton, 3, 2, 1, 2)
         spacerItem1 = QtWidgets.QSpacerItem(14, 151, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout.addItem(spacerItem1, 4, 2, 1, 1)
@@ -103,6 +106,24 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.generateButton.setText(_translate("Form", "GENERATE"))
         self.inputConfigLabel.setText(_translate("Form", "INPUT CONFIGURATION"))
         self.learnButton.setText(_translate("Form", "Learn More"))
+
+    def openFileDialog(self):
+        fileName = QtWidgets.QFileDialog.getOpenFileName(self, "QtWidgets.QFileDialog.getOpenFileName()", "","Image Files (*.png *.jpg *.jpeg *.bmp)" )
+        if fileName:
+            return fileName
+
+    def browseButtonFunction(self):
+        fileName, _ = self.openFileDialog()
+        if fileName:
+            self.imageUpload.setPixmap(QtGui.QPixmap(fileName))
+            self.setFilePath(fileName)
+
+    def setFilePath(self, fileName):
+        _translate = QtCore.QCoreApplication.translate
+        self.plainTextEdit.setPlainText(_translate("Form", fileName))
+
+
+
 
 """
 The second page of the User Interface
