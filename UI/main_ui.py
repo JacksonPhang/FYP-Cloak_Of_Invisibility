@@ -1,4 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import Qt
+from os.path import isfile
+
+ACCEPTED_INPUT_FILE = ["png", "jpg", "jpeg", "bmp"]
 
 """
 Custom QLabel
@@ -7,10 +11,11 @@ Used to hold a image
 Functions as the drag and drop box for user to upload images
 """
 class MyQLabel(QtWidgets.QLabel):
-        def __init__(self, Form):
+        def __init__(self, Form, parent):
             super().__init__(Form)
-            self._parent = Form
+            self._parent = parent
             self.setAcceptDrops(True)
+            self.setScaledContents(True)
 
         def dragEnterEvent(self, event):
             event.accept() if event.mimeData().hasImage else event.ignore()
@@ -22,13 +27,33 @@ class MyQLabel(QtWidgets.QLabel):
             if event.mimeData().hasImage:
                 event.setDropAction(QtCore.Qt.CopyAction)
                 file_path = event.mimeData().urls()[0].toLocalFile()
-                print(file_path)
                 self.setPixmap(QtGui.QPixmap(file_path))
                 self._parent.setFilePath(file_path)
     
                 event.accept()
             else:
                 event.ignore()
+
+"""
+Custom QPlainTextEdit
+Used to display file path of chosen picture
+Used to enter file path manually if user intends to do so
+"""
+class MyQPlainTextEdit(QtWidgets.QPlainTextEdit):
+    def __init__(self, Form, parent):
+        super().__init__(Form)
+        self._parent = parent
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Qt.Key_Return:
+            file_path = self.toPlainText()
+            if isfile(file_path) and self.isImageFile(file_path):
+                self._parent.imageUpload.setPixmap(QtGui.QPixmap(file_path))
+        else:
+            super().keyPressEvent(event)
+
+    def isImageFile(self, file):
+        return file.split(".")[-1] in ACCEPTED_INPUT_FILE
 
 """
 The first page of the User Interface
@@ -42,7 +67,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         Form.resize(980, 550)
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.imageUpload = MyQLabel(self)
+        self.imageUpload = MyQLabel(Form, self)
         self.imageUpload.setText("")
         self.imageUpload.setPixmap(QtGui.QPixmap(".\\Screenshot (106).png"))
         self.imageUpload.setScaledContents(True)
@@ -54,8 +79,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.filePathLabel = QtWidgets.QLabel(Form)
         self.filePathLabel.setObjectName("filePathLabel")
         self.gridLayout.addWidget(self.filePathLabel, 1, 0, 1, 2)
-        self.plainTextEdit = QtWidgets.QPlainTextEdit(Form)
-        self.plainTextEdit.setMaximumSize(QtCore.QSize(16777215, 28))
+        self.plainTextEdit = MyQPlainTextEdit(Form, self)
         self.plainTextEdit.setAutoFillBackground(False)
         self.plainTextEdit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.plainTextEdit.setObjectName("plainTextEdit")
@@ -107,23 +131,16 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.inputConfigLabel.setText(_translate("Form", "INPUT CONFIGURATION"))
         self.learnButton.setText(_translate("Form", "Learn More"))
 
-    def openFileDialog(self):
-        fileName = QtWidgets.QFileDialog.getOpenFileName(self, "QtWidgets.QFileDialog.getOpenFileName()", "","Image Files (*.png *.jpg *.jpeg *.bmp)" )
-        if fileName:
-            return fileName
-
     def browseButtonFunction(self):
-        fileName, _ = self.openFileDialog()
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "File Browser", "","Image Files (*.png *.jpg *.jpeg *.bmp)")
         if fileName:
             self.imageUpload.setPixmap(QtGui.QPixmap(fileName))
             self.setFilePath(fileName)
 
     def setFilePath(self, fileName):
         _translate = QtCore.QCoreApplication.translate
+        self.plainTextEdit.clear()
         self.plainTextEdit.setPlainText(_translate("Form", fileName))
-
-
-
 
 """
 The second page of the User Interface
