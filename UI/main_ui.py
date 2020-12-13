@@ -1,59 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5 import Qt
-from os.path import isfile
-
-ACCEPTED_INPUT_FILE = ["png", "jpg", "jpeg", "bmp"]
-
-"""
-Custom QLabel
-Used to hold a image
-
-Functions as the drag and drop box for user to upload images
-"""
-class MyQLabel(QtWidgets.QLabel):
-        def __init__(self, Form, parent):
-            super().__init__(Form)
-            self._parent = parent
-            self.setAcceptDrops(True)
-            self.setScaledContents(True)
-
-        def dragEnterEvent(self, event):
-            event.accept() if event.mimeData().hasImage else event.ignore()
-    
-        def dragMoveEvent(self, event):
-            event.accept() if event.mimeData().hasImage else event.ignore()
-    
-        def dropEvent(self, event):
-            if event.mimeData().hasImage:
-                event.setDropAction(QtCore.Qt.CopyAction)
-                file_path = event.mimeData().urls()[0].toLocalFile()
-                self.setPixmap(QtGui.QPixmap(file_path))
-                self._parent.setFilePath(file_path)
-    
-                event.accept()
-            else:
-                event.ignore()
-
-"""
-Custom QPlainTextEdit
-Used to display file path of chosen picture
-Used to enter file path manually if user intends to do so
-"""
-class MyQPlainTextEdit(QtWidgets.QPlainTextEdit):
-    def __init__(self, Form, parent):
-        super().__init__(Form)
-        self._parent = parent
-
-    def keyPressEvent(self, event):
-        if event.key() == Qt.Qt.Key_Return:
-            file_path = self.toPlainText()
-            if isfile(file_path) and self.isImageFile(file_path):
-                self._parent.imageUpload.setPixmap(QtGui.QPixmap(file_path))
-        else:
-            super().keyPressEvent(event)
-
-    def isImageFile(self, file):
-        return file.split(".")[-1] in ACCEPTED_INPUT_FILE
+from my_qlabel import MyQLabel
+from my_qplaintextedit import MyQPlainTextEdit
 
 """
 The first page of the User Interface
