@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from my_qlabel import MyQLabel
 from my_qplaintextedit import MyQPlainTextEdit
+from my_messagebox import MyQMessageBox
 
 """
 The first page of the User Interface
@@ -10,7 +11,7 @@ class Ui_FormOne(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         Form = QtWidgets.QWidget()
-        Form.setObjectName("Form1")
+        Form.setObjectName("Form")
         Form.resize(980, 550)
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
@@ -57,6 +58,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.gridLayout_2.addLayout(self.gridLayout, 0, 2, 1, 1)
         self.learnButton = QtWidgets.QPushButton(Form)
         self.learnButton.setObjectName("learnButton")
+        self.learnButton.clicked.connect(self.helpMessagePopup)
         self.gridLayout_2.addWidget(self.learnButton, 1, 0, 1, 1)
         spacerItem4 = QtWidgets.QSpacerItem(665, 14, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem4, 1, 1, 1, 1)
@@ -89,6 +91,16 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.plainTextEdit.clear()
         self.plainTextEdit.setPlainText(_translate("Form", fileName))
 
+    def helpMessagePopup(self):
+        popup = QtWidgets.QMessageBox()
+        popup.setWindowTitle("Application Information")
+        popup.setWindowModality(QtCore.Qt.ApplicationModal)
+        popup.setIcon(QtWidgets.QMessageBox.Information)
+        popup.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        popup.setText("Computer Science Final Year Project\nCloak Of Invisibility")
+        popup.setInformativeText("Add In Information Here")
+        popup.exec_()
+
 """
 The second page of the User Interface
 Do not edit unless you know what's up
@@ -97,7 +109,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         Form = QtWidgets.QWidget()
-        Form.setObjectName("Form2")
+        Form.setObjectName("Form")
         Form.resize(980, 550)
         self.gridLayout = QtWidgets.QGridLayout(Form)
         self.gridLayout.setObjectName("gridLayout")
@@ -158,6 +170,9 @@ main_ui_reference = None
 class main_ui(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
+        
+        self.setWindowTitle("Masking Application")
+        self.setObjectName("Masking Application")
 
         mainLayout = QtWidgets.QVBoxLayout()
         firstPageUI = Ui_FormOne()
