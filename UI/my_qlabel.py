@@ -13,12 +13,30 @@ class MyQLabel(QtWidgets.QLabel):
             self.setAcceptDrops(True)
             self.setScaledContents(True)
 
+        """
+        Override Parent Function
+
+        Allows class to accept image event which enters
+        the boundary of the class object
+        """
         def dragEnterEvent(self, event):
             event.accept() if event.mimeData().hasImage else event.ignore()
-    
+
+        """
+        Override Parent Function
+
+        Allows class to accept image event which moves
+        within the boundary of the class object
+        """    
         def dragMoveEvent(self, event):
             event.accept() if event.mimeData().hasImage else event.ignore()
-    
+
+        """
+        Override Parent Function
+
+        Allows class to accept image event which drops
+        within the boundary of the class object
+        """    
         def dropEvent(self, event):
             if event.mimeData().hasImage:
                 event.setDropAction(QtCore.Qt.CopyAction)
