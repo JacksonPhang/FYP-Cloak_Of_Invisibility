@@ -63,8 +63,6 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.gridLayout_2.addWidget(self.learnButton, 1, 0, 1, 1)
         spacerItem4 = QtWidgets.QSpacerItem(665, 14, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem4, 1, 1, 1, 1)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout_2.addItem(spacerItem5, 1, 2, 1, 1)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
