@@ -51,8 +51,6 @@ class Ui_FormTwo(QtWidgets.QWidget):
         self.gridLayout.addWidget(self.saveButton, 1, 1, 1, 1)
         spacerItem1 = QtWidgets.QSpacerItem(313, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem1, 1, 2, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 22, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem2, 1, 3, 1, 1)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
