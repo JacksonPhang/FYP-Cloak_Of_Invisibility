@@ -7,8 +7,13 @@ class MyQLabel(QtWidgets.QLabel):
 
     Functions as the drag and drop box for user to upload images
     """
-    
+
     def __init__(self, Form, parent):
+        """
+        Initialise Object
+
+        Allows class to accept files to be dropped on its object
+        """
         super().__init__(Form)
         self._parent = parent
         self.setAcceptDrops(True)

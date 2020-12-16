@@ -11,6 +11,9 @@ class MyQPlainTextEdit(QtWidgets.QPlainTextEdit):
     """
 
     def __init__(self, Form, parent):
+        """
+        Initialise Object
+        """
         super().__init__(Form)
         self._parent = parent
 

@@ -7,6 +7,11 @@ class Ui_FormTwo(QtWidgets.QWidget):
     """
 
     def __init__(self, parent):
+        """
+        Initialise Object
+
+        Spawns the UI elements and sets element positions 
+        """
         super().__init__()
         self._parent = parent
         self.file_path = ".\\Screenshot (106).png"
