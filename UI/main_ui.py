@@ -17,16 +17,39 @@ class main_ui(QtWidgets.QWidget):
         #    Create the Layout and the UI element    #
         ##############################################
         mainLayout = QtWidgets.QVBoxLayout()
-        firstPageUI = Ui_FormOne(self)
+        self.firstPageUI = Ui_FormOne(self)
         secondPageUI = Ui_FormTwo(self)
 
         self.stackWidget = QtWidgets.QStackedWidget()
-        self.stackWidget.addWidget(firstPageUI) # Index 0
+        self.stackWidget.addWidget(self.firstPageUI) # Index 0
         self.stackWidget.addWidget(secondPageUI) # Index 1
 
         mainLayout.addWidget(self.stackWidget)
         self.setLayout(mainLayout)
         ##############################################
+
+    #####################################################################################################
+    #                                         Helper Functions                                          #
+    #####################################################################################################
+    """ (Testing With Backend Required)
+    Helper Function
+
+    Used to obtain the input from the user based
+    on the UI slider
+    """
+    def getPerturbationVariable(self):
+        # print(self.firstPageUI.perturbationSpinBox.value)
+        return self.firstPageUI.perturbationSpinBox.value
+
+    """ (Testing With Backend Required)
+    Helper Function
+
+    Used to obtain the input image address from 
+    the user
+    """
+    def getInputImage(self):
+        # print(self.firstPageUI.perturbationSpinBox.value)
+        return self.firstPageUI.file_path
 
 if __name__ == "__main__":
     import sys

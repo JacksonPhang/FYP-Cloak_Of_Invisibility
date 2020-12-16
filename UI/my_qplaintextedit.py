@@ -24,6 +24,7 @@ class MyQPlainTextEdit(QtWidgets.QPlainTextEdit):
             file_path = self.toPlainText()
             if isfile(file_path) and self.isImageFile(file_path):
                 self._parent.imageUpload.setPixmap(QtGui.QPixmap(file_path))
+                self._parent.file_path = file_path
         else:
             super().keyPressEvent(event)
 

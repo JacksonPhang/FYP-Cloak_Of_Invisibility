@@ -10,6 +10,7 @@ class Ui_FormOne(QtWidgets.QWidget):
     def __init__(self, parent):
         super().__init__()
         self._parent = parent
+        self.file_path = ""
 
         Form = QtWidgets.QWidget()
         Form.setObjectName("Form")
@@ -144,6 +145,7 @@ class Ui_FormOne(QtWidgets.QWidget):
     the text edit as a display to the user
     """
     def setFilePath(self, fileName):
+        self.file_path = fileName
         _translate = QtCore.QCoreApplication.translate
         self.plainTextEdit.clear()
         self.plainTextEdit.setPlainText(_translate("Form", fileName))
