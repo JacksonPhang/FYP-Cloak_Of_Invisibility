@@ -2,12 +2,19 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from first_page import Ui_FormOne
 from second_page import Ui_FormTwo
 
-"""
-Main UI class
-Spawns both pages of the application
-"""
 class main_ui(QtWidgets.QWidget):
+    """
+    Main UI class
+    Spawns both pages of the application
+    """
+
     def __init__(self):
+        """
+        Initialise Object
+
+        Spawns the UI pages
+        Adds pages into containers
+        """
         super().__init__()
         
         self.setWindowTitle("Masking Application")
@@ -31,23 +38,23 @@ class main_ui(QtWidgets.QWidget):
     #####################################################################################################
     #                                         Helper Functions                                          #
     #####################################################################################################
-    """ (Testing With Backend Required)
-    Helper Function
-
-    Used to obtain the input from the user based
-    on the UI slider
-    """
     def getPerturbationVariable(self):
+        """ (Testing With Backend Required)
+        Helper Function
+
+        Used to obtain the input from the user based
+        on the UI slider
+        """
         # print(self.firstPageUI.perturbationSpinBox.value)
         return self.firstPageUI.perturbationSpinBox.value
 
-    """ (Testing With Backend Required)
-    Helper Function
-
-    Used to obtain the input image address from 
-    the user
-    """
     def getInputImage(self):
+        """ (Testing With Backend Required)
+        Helper Function
+
+        Used to obtain the input image address from 
+        the user
+        """
         # print(self.firstPageUI.perturbationSpinBox.value)
         return self.firstPageUI.file_path
 

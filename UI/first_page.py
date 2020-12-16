@@ -1,12 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from my_qlabel import MyQLabel
 from my_qplaintextedit import MyQPlainTextEdit
-
-"""
-The first page of the User Interface
-Do not edit unless you know what's up
-"""                
+              
 class Ui_FormOne(QtWidgets.QWidget):
+    """
+    The first page of the User Interface
+    Do not edit unless you know what's up
+    """  
+
     def __init__(self, parent):
         super().__init__()
         self._parent = parent
@@ -97,35 +98,35 @@ class Ui_FormOne(QtWidgets.QWidget):
 
     #####################################################################################################
     #                                       Button Functionality                                        #
-    #####################################################################################################
-    """
-    Generate Button Functionality
-
-    Changes the selection of the application to the second page
-    """    
+    #####################################################################################################  
     def generateButtonFunction(self):
+        """
+        Generate Button Functionality
+
+        Changes the selection of the application to the second page
+        """  
         # Change to second page
         self._parent.stackWidget.setCurrentIndex(1)
 
-    """
-    Browse Button Functionality
-
-    Open default file browser to select input file    
-    """
     def browseButtonFunction(self):
+        """
+        Browse Button Functionality
+
+        Open default file browser to select input file    
+        """
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "File Browser", "","Image Files (*.png *.jpg *.jpeg *.bmp)")
         if fileName:
             self.imageUpload.setPixmap(QtGui.QPixmap(fileName))
             self.setFilePath(fileName)
 
-    """
-    Learn Button Function
-
-    Used to create a message pop up window to 
-    provide the user with more information
-    about the application
-    """
     def learnButtonFunction(self):
+        """
+        Learn Button Function
+
+        Used to create a message pop up window to 
+        provide the user with more information
+        about the application
+        """
         popup = QtWidgets.QMessageBox()
         popup.setWindowTitle("Application Information")
         popup.setWindowModality(QtCore.Qt.ApplicationModal)
@@ -138,13 +139,13 @@ class Ui_FormOne(QtWidgets.QWidget):
     #####################################################################################################
     #                                         Helper Functions                                          #
     #####################################################################################################
-    """
-    Helper Function
-
-    Used to set the file path of the chosen image file to
-    the text edit as a display to the user
-    """
     def setFilePath(self, fileName):
+        """
+        Helper Function
+
+        Used to set the file path of the chosen image file to
+        the text edit as a display to the user
+        """
         self.file_path = fileName
         _translate = QtCore.QCoreApplication.translate
         self.plainTextEdit.clear()

@@ -1,10 +1,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-"""
-The second page of the User Interface
-Do not edit unless you know what's up
-"""
 class Ui_FormTwo(QtWidgets.QWidget):
+    """
+    The second page of the User Interface
+    Do not edit unless you know what's up
+    """
+
     def __init__(self, parent):
         super().__init__()
         self._parent = parent
@@ -70,21 +71,21 @@ class Ui_FormTwo(QtWidgets.QWidget):
     #####################################################################################################
     #                                       Button Functionality                                        #
     #####################################################################################################
-    """
-    Different Image Button Functionality
-
-    Changes the selection of the application to the first page
-    """ 
     def differentImageButtonFunction(self):
+        """
+        Different Image Button Functionality
+
+        Changes the selection of the application to the first page
+        """ 
         # Change to first page
         self._parent.stackWidget.setCurrentIndex(0)
 
-    """
-    Save Button Functionality
-
-    Saves the image into local storage
-    """ 
     def saveButtonFunction(self):
+        """
+        Save Button Functionality
+
+        Saves the image into local storage
+        """ 
         fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self, "File Browser", "", "Image Files (*.png *.jpg *.jpeg *.bmp)")
         if fileName:
             print(fileName)
@@ -95,12 +96,12 @@ class Ui_FormTwo(QtWidgets.QWidget):
     #####################################################################################################
     #                                         Helper Functions                                          #
     #####################################################################################################
-    """
-    Helper Function
-
-    Used to set the file path of the perturbed image file
-    to class reference
-    """
     def setFilePathAndImage(self, file):
+        """
+        Helper Function
+
+        Used to set the file path of the perturbed image file
+        to class reference
+        """
         self.file_path = file
         self.imageOutput.setPixmap(QtGui.QPixmap(file))
