@@ -58,9 +58,9 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.filePathLabel = QtWidgets.QLabel(Form)
         self.filePathLabel.setObjectName("filePathLabel")
         self.gridLayout.addWidget(self.filePathLabel, 1, 0, 1, 2)
-        self.label = QtWidgets.QLabel(Form)
-        self.label.setObjectName("label")
-        self.gridLayout.addWidget(self.label, 4, 0, 1, 2)
+        self.sliderBarLabel = QtWidgets.QLabel(Form)
+        self.sliderBarLabel.setObjectName("label")
+        self.gridLayout.addWidget(self.sliderBarLabel, 4, 0, 1, 2)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 2, 1, 1)
         self.learnButton = QtWidgets.QPushButton(Form)
         self.learnButton.setObjectName("learnButton")
@@ -81,7 +81,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.browseButton.setText(_translate("Form", "Browse"))
         self.inputConfigLabel.setText(_translate("Form", "INPUT CONFIGURATION"))
         self.filePathLabel.setText(_translate("Form", "Choose A File:"))
-        self.label.setText(_translate("Form", "Perturbation Level:"))
+        self.sliderBarLabel.setText(_translate("Form", "Perturbation Level:"))
         self.learnButton.setText(_translate("Form", "Learn More"))
 
     #####################################################################################################
