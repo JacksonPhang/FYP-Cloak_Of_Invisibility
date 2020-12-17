@@ -1,13 +1,20 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-"""
-The second page of the User Interface
-Do not edit unless you know what's up
-"""
 class Ui_FormTwo(QtWidgets.QWidget):
+    """
+    The second page of the User Interface
+    Do not edit unless you know what's up
+    """
+
     def __init__(self, parent):
+        """
+        Initialise Object
+
+        Spawns the UI elements and sets element positions 
+        """
         super().__init__()
         self._parent = parent
+        self.file_path = ".\\Screenshot (106).png"
 
         Form = QtWidgets.QWidget()
         Form.setObjectName("Form")
@@ -16,7 +23,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
         self.gridLayout.setObjectName("gridLayout")
         self.imageOutput = QtWidgets.QLabel(Form)
         self.imageOutput.setText("")
-        self.imageOutput.setPixmap(QtGui.QPixmap(".\\Screenshot (106).png"))
+        self.imageOutput.setPixmap(QtGui.QPixmap(self.file_path))
         self.imageOutput.setScaledContents(True)
         self.imageOutput.setObjectName("imageOutput")
         self.gridLayout.addWidget(self.imageOutput, 0, 0, 1, 4)
@@ -48,6 +55,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
         self.gridLayout.addItem(spacerItem, 1, 0, 1, 1)
         self.saveButton = QtWidgets.QPushButton(Form)
         self.saveButton.setObjectName("saveButton")
+        self.saveButton.clicked.connect(self.saveButtonFunction)
         self.gridLayout.addWidget(self.saveButton, 1, 1, 1, 1)
         spacerItem1 = QtWidgets.QSpacerItem(313, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem1, 1, 2, 1, 1)
@@ -68,11 +76,37 @@ class Ui_FormTwo(QtWidgets.QWidget):
     #####################################################################################################
     #                                       Button Functionality                                        #
     #####################################################################################################
-    """
-    Different Image Button Functionality
-
-    Changes the selection of the application to the first page
-    """ 
     def differentImageButtonFunction(self):
+        """
+        Different Image Button Functionality
+
+        Changes the selection of the application to the first page
+        """ 
         # Change to first page
         self._parent.stackWidget.setCurrentIndex(0)
+
+    def saveButtonFunction(self):
+        """
+        Save Button Functionality
+
+        Saves the image into local storage
+        """ 
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self, "File Browser", "", "Image Files (*.png *.jpg *.jpeg *.bmp)")
+        if fileName:
+            print(fileName)
+            with open(self.file_path, "rb") as read_file, open(fileName, "wb") as write_file:
+                for data in read_file:
+                    write_file.write(data)
+
+    #####################################################################################################
+    #                                         Helper Functions                                          #
+    #####################################################################################################
+    def setFilePathAndImage(self, file):
+        """
+        Helper Function
+
+        Used to set the file path of the perturbed image file
+        to class reference
+        """
+        self.file_path = file
+        self.imageOutput.setPixmap(QtGui.QPixmap(file))
