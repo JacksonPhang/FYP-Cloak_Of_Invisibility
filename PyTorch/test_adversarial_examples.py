@@ -4,6 +4,9 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 import models
 from models import MNIST_target_net
+import matplotlib.pyplot as plt
+import numpy as np
+from PIL import Image
 
 
 if __name__ == "__main__":
@@ -28,6 +31,22 @@ if __name__ == "__main__":
     pretrained_G = models.Generator(gen_input_nc, image_nc).to(device)
     pretrained_G.load_state_dict(torch.load(pretrained_generator_path))
     pretrained_G.eval()
+
+    data_transforms = transforms.Compose([
+        transforms.RandomResizedCrop(256),
+        transforms.ToTensor()
+    ])
+
+    image = Image.open('./dataset/input/input_img.jpg')
+    image = data_transforms(image)
+    image.unsqueeze_(1)
+    x = image.to(device)
+    perturbation = pretrained_G(x)
+    perturbation = torch.clamp(perturbation, -0.3, 0.3)
+    adv_img = perturbation + image
+    adv_img = torch.clamp(adv_img, 0, 1)
+    plt.imshow(np.transpose(adv_img[0].detach().numpy(), (1, 2, 0)))
+    plt.show()
 
     # test adversarial examples in MNIST training dataset
     mnist_dataset = torchvision.datasets.MNIST('./dataset', train=True, transform=transforms.ToTensor(), download=True)
