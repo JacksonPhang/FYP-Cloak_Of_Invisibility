@@ -64,7 +64,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.inputTextEdit = QtWidgets.QPlainTextEdit(Form)
         self.inputTextEdit.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.inputTextEdit.setAutoFillBackground(False)
-        self.inputTextEdit.setObjectName("plainTextEdit")
+        self.inputTextEdit.setObjectName("inputTextEdit")
         self.gridLayout.addWidget(self.inputTextEdit, 2, 0, 1, 4)
         spacerItem3 = QtWidgets.QSpacerItem(29, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem3, 9, 0, 1, 1)
@@ -156,5 +156,5 @@ class Ui_FormOne(QtWidgets.QWidget):
         """
         self.file_path = fileName
         _translate = QtCore.QCoreApplication.translate
-        self.plainTextEdit.clear()
-        self.plainTextEdit.setPlainText(_translate("Form", fileName))
+        self.inputTextEdit.clear()
+        self.inputTextEdit.setPlainText(_translate("Form", fileName))
