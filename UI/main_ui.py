@@ -55,7 +55,7 @@ class main_ui(QtWidgets.QWidget):
         Used to obtain the input image address from 
         the user
         """
-        # print(self.firstPageUI.perturbationSpinBox.value)
+        # print(self.firstPageUI.file_path)
         return self.firstPageUI.file_path
 
 if __name__ == "__main__":

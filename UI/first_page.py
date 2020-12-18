@@ -25,7 +25,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.imageUpload = MyQLabel(Form, self)
         self.imageUpload.setText("")
-        self.imageUpload.setPixmap(QtGui.QPixmap("Screenshot (106).png"))
+        self.imageUpload.setPixmap(QtGui.QPixmap("Screenshot (106).png"), False)
         self.imageUpload.setScaledContents(True)
         self.imageUpload.setObjectName("imageUpload")
         self.gridLayout_2.addWidget(self.imageUpload, 0, 0, 1, 2)
@@ -158,3 +158,6 @@ class Ui_FormOne(QtWidgets.QWidget):
         _translate = QtCore.QCoreApplication.translate
         self.inputTextEdit.clear()
         self.inputTextEdit.setPlainText(_translate("Form", fileName))
+
+    def setPixMap(self, file_path):
+        self.inputTextEdit.setPixmap(QtGui.QPixmap(file_path).scaled(1580, 880, QtCore.Qt.KeepAspectRatio))
