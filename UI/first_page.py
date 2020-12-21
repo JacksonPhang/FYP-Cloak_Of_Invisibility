@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from my_qlabel import MyQLabel
 from my_qplaintextedit import MyQPlainTextEdit
+from accepted_file_input import getAcceptInput
               
 class Ui_FormOne(QtWidgets.QWidget):
     """
@@ -132,7 +133,7 @@ class Ui_FormOne(QtWidgets.QWidget):
 
         Open default file browser to select input file    
         """
-        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "File Browser", "","Image Files (*.png *.jpg *.jpeg *.bmp)")
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "File Browser", "","Image Files " + getAcceptInput())
         if fileName:
             self.imageUpload.setPixmap(QtGui.QPixmap(fileName))
             self.setFilePath(fileName)
