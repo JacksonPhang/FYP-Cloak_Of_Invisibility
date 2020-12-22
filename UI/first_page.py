@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from my_qlabel import MyQLabel
 from my_qplaintextedit import MyQPlainTextEdit
+from accepted_file_input import getAcceptInput
               
 class Ui_FormOne(QtWidgets.QWidget):
     """
@@ -23,18 +24,28 @@ class Ui_FormOne(QtWidgets.QWidget):
         Form.resize(980, 550)
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.imageUpload = QtWidgets.QLabel(Form)
+        self.imageUpload = MyQLabel(Form, self)
         self.imageUpload.setText("")
-        self.imageUpload.setPixmap(QtGui.QPixmap("Screenshot (106).png"))
+        self.imageUpload.setPixmap(QtGui.QPixmap("Screenshot (106).png"), False)
         self.imageUpload.setScaledContents(True)
         self.imageUpload.setObjectName("imageUpload")
         self.gridLayout_2.addWidget(self.imageUpload, 0, 0, 1, 2)
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
-        spacerItem = QtWidgets.QSpacerItem(26, 17, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem, 9, 3, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(14, 151, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem1, 6, 2, 1, 1)
+        spacerItem = QtWidgets.QSpacerItem(73, 17, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem, 3, 0, 1, 2)
+        spacerItem1 = QtWidgets.QSpacerItem(29, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem1, 14, 0, 1, 1)
+        self.cifarCheckBox = QtWidgets.QCheckBox(Form)
+        self.cifarCheckBox.setChecked(True)
+        self.cifarCheckBox.setObjectName("cifarCheckBox")
+        self.gridLayout.addWidget(self.cifarCheckBox, 4, 0, 1, 1)
+        self.mnistCheckBox = QtWidgets.QCheckBox(Form)
+        self.mnistCheckBox.setObjectName("mnistCheckBox")
+        self.gridLayout.addWidget(self.mnistCheckBox, 5, 0, 1, 1)
+        self.buttonGroup = QtWidgets.QButtonGroup()
+        self.buttonGroup.addButton(self.cifarCheckBox, 1)
+        self.buttonGroup.addButton(self.mnistCheckBox, 2)
         self.browseButton = QtWidgets.QPushButton(Form)
         self.browseButton.clicked.connect(self.browseButtonFunction)
         self.browseButton.setObjectName("browseButton")
@@ -49,35 +60,35 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.inputConfigLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.inputConfigLabel.setObjectName("inputConfigLabel")
         self.gridLayout.addWidget(self.inputConfigLabel, 0, 0, 1, 4)
-        spacerItem2 = QtWidgets.QSpacerItem(73, 17, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem2, 3, 0, 1, 2)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem2, 6, 2, 1, 2)
         self.generateButton = QtWidgets.QPushButton(Form)
         self.generateButton.clicked.connect(self.generateButtonFunction)
         self.generateButton.setObjectName("generateButton")
-        self.gridLayout.addWidget(self.generateButton, 9, 1, 1, 2)
+        self.gridLayout.addWidget(self.generateButton, 14, 1, 1, 2)
         self.horizontalSlider = QtWidgets.QSlider(Form)
         self.horizontalSlider.setMinimum(1)
         self.horizontalSlider.setMaximum(100)
         self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider.setObjectName("horizontalSlider")
-        self.gridLayout.addWidget(self.horizontalSlider, 5, 0, 1, 4)
-        self.inputTextEdit = QtWidgets.QPlainTextEdit(Form)
+        self.gridLayout.addWidget(self.horizontalSlider, 8, 0, 1, 4)
+        self.inputTextEdit = MyQPlainTextEdit(Form, self)
         self.inputTextEdit.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.inputTextEdit.setAutoFillBackground(False)
-        self.inputTextEdit.setObjectName("plainTextEdit")
+        self.inputTextEdit.setObjectName("inputTextEdit")
         self.gridLayout.addWidget(self.inputTextEdit, 2, 0, 1, 4)
-        spacerItem3 = QtWidgets.QSpacerItem(29, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem3, 9, 0, 1, 1)
+        spacerItem3 = QtWidgets.QSpacerItem(26, 17, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem3, 14, 3, 1, 1)
         self.perturbationLabel = QtWidgets.QLabel(Form)
         self.perturbationLabel.setObjectName("perturbationLabel")
-        self.gridLayout.addWidget(self.perturbationLabel, 4, 0, 1, 1)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem4, 4, 2, 1, 2)
+        self.gridLayout.addWidget(self.perturbationLabel, 6, 0, 1, 1)
+        spacerItem4 = QtWidgets.QSpacerItem(14, 150, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout.addItem(spacerItem4, 9, 2, 1, 1)
         self.perturbationSpinBox = QtWidgets.QSpinBox(Form)
         self.perturbationSpinBox.setMinimum(1)
         self.perturbationSpinBox.setMaximum(100)
         self.perturbationSpinBox.setObjectName("perturbationSpinBox")
-        self.gridLayout.addWidget(self.perturbationSpinBox, 4, 1, 1, 1)
+        self.gridLayout.addWidget(self.perturbationSpinBox, 6, 1, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 2, 1, 1)
         self.learnButton = QtWidgets.QPushButton(Form)
         self.learnButton.clicked.connect(self.learnButtonFunction)
@@ -102,6 +113,8 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.generateButton.setText(_translate("Form", "GENERATE"))
         self.inputTextEdit.setPlainText(_translate("Form", "Input File Path"))
         self.perturbationLabel.setText(_translate("Form", "Perturbation Level:"))
+        self.mnistCheckBox.setText(_translate("Form", "MNIST"))
+        self.cifarCheckBox.setText(_translate("Form", "CIFAR10"))
         self.learnButton.setText(_translate("Form", "Learn More"))
 
     #####################################################################################################
@@ -122,7 +135,7 @@ class Ui_FormOne(QtWidgets.QWidget):
 
         Open default file browser to select input file    
         """
-        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "File Browser", "","Image Files (*.png *.jpg *.jpeg *.bmp)")
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "File Browser", "","Image Files " + getAcceptInput())
         if fileName:
             self.imageUpload.setPixmap(QtGui.QPixmap(fileName))
             self.setFilePath(fileName)
@@ -156,5 +169,8 @@ class Ui_FormOne(QtWidgets.QWidget):
         """
         self.file_path = fileName
         _translate = QtCore.QCoreApplication.translate
-        self.plainTextEdit.clear()
-        self.plainTextEdit.setPlainText(_translate("Form", fileName))
+        self.inputTextEdit.clear()
+        self.inputTextEdit.setPlainText(_translate("Form", fileName))
+
+    def setPixMap(self, file_path):
+        self.inputTextEdit.setPixmap(QtGui.QPixmap(file_path).scaled(1580, 880, QtCore.Qt.KeepAspectRatio))

@@ -55,8 +55,21 @@ class main_ui(QtWidgets.QWidget):
         Used to obtain the input image address from 
         the user
         """
-        # print(self.firstPageUI.perturbationSpinBox.value)
+        # print(self.firstPageUI.file_path)
         return self.firstPageUI.file_path
+
+    def getCheckBox(self):
+        """ (Testing With Backend Required)
+        Helper Function
+
+        Used to obtain the checkbox value from the
+        user
+        """
+        checkbox_value = {
+            1: "CIFAR10",
+            2: "MNIST"
+        }
+        return checkbox_value.get(self.buttonGroup.checkedId(), "Error")
 
 if __name__ == "__main__":
     import sys

@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from accepted_file_input import getAcceptInput
 
 class Ui_FormTwo(QtWidgets.QWidget):
     """
@@ -91,7 +92,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
 
         Saves the image into local storage
         """ 
-        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self, "File Browser", "", "Image Files (*.png *.jpg *.jpeg *.bmp)")
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self, "File Browser", "", "Image Files " + getAcceptInput())
         if fileName:
             print(fileName)
             with open(self.file_path, "rb") as read_file, open(fileName, "wb") as write_file:
