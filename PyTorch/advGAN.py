@@ -112,8 +112,7 @@ class AdvGAN_Attack:
         return loss_D_GAN.item(), loss_G_fake.item(), loss_perturb.item(), loss_adv.item()
 
     def train(self, train_dataloader, epochs):
-        for epoch in range(1, epochs+1):
-
+        for epoch in range(1, epochs+1): 
             if epoch == 50:
                 self.optimizer_G = torch.optim.Adam(self.netG.parameters(),
                                                     lr=0.0001)
@@ -147,7 +146,7 @@ class AdvGAN_Attack:
                    loss_perturb_sum/num_batch, loss_adv_sum/num_batch))
 
             # save generator
-            if epoch%20==0:
-                netG_file_name = models_path + 'netG_epoch_' + str(epoch) + '.pth'
+            if epoch%10==0:
+                netG_file_name = models_path + 'cifar_epoch_' + str(epoch) + '.pth'
                 torch.save(self.netG.state_dict(), netG_file_name)
 
