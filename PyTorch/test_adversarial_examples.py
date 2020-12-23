@@ -10,7 +10,7 @@ import numpy as np
 from PIL import Image
 
 
-if __name__ == "__main__":
+def adversarial_attack():
     use_cuda=True
     image_nc=1
     batch_size = 128
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     pretrained_G.eval()
 
     data_transforms = transforms.Compose([
-        transforms.RandomResizedCrop(256),
+        transforms.RandomResizedCrop(1000),
         transforms.ToTensor()
     ])
 
@@ -51,38 +51,40 @@ if __name__ == "__main__":
     plt.savefig('./IO_images/output_img.jpg', bbox_inches='tight')
     plt.show()
 
-    # test adversarial examples in MNIST training dataset
-    mnist_dataset = torchvision.datasets.MNIST('./dataset', train=True, transform=transforms.ToTensor(), download=True)
-    train_dataloader = DataLoader(mnist_dataset, batch_size=batch_size, shuffle=False, num_workers=1)
-    num_correct = 0
-    for i, data in enumerate(train_dataloader, 0):
-        test_img, test_label = data
-        test_img, test_label = test_img.to(device), test_label.to(device)
-        perturbation = pretrained_G(test_img)
-        perturbation = torch.clamp(perturbation, -0.3, 0.3)
-        adv_img = perturbation + test_img
-        adv_img = torch.clamp(adv_img, 0, 1)
-        pred_lab = torch.argmax(target_model(adv_img),1)
-        num_correct += torch.sum(pred_lab==test_label,0)
+    # # test adversarial examples in MNIST training dataset
+    # mnist_dataset = torchvision.datasets.MNIST('./dataset', train=True, transform=transforms.ToTensor(), download=True)
+    # train_dataloader = DataLoader(mnist_dataset, batch_size=batch_size, shuffle=False, num_workers=1)
+    # num_correct = 0
+    # for i, data in enumerate(train_dataloader, 0):
+    #     test_img, test_label = data
+    #     test_img, test_label = test_img.to(device), test_label.to(device)
+    #     perturbation = pretrained_G(test_img)
+    #     perturbation = torch.clamp(perturbation, -0.3, 0.3)
+    #     adv_img = perturbation + test_img
+    #     adv_img = torch.clamp(adv_img, 0, 1)
+    #     pred_lab = torch.argmax(target_model(adv_img),1)
+    #     num_correct += torch.sum(pred_lab==test_label,0)
+    #
+    # print('MNIST training dataset:')
+    # print('num_correct: ', num_correct.item())
+    # print('accuracy of adv imgs in training set: %f\n'%(num_correct.item()/len(mnist_dataset)))
+    #
+    # # test adversarial examples in MNIST testing dataset
+    # mnist_dataset_test = torchvision.datasets.MNIST('./dataset', train=False, transform=transforms.ToTensor(), download=True)
+    # test_dataloader = DataLoader(mnist_dataset_test, batch_size=batch_size, shuffle=False, num_workers=1)
+    # num_correct = 0
+    # for i, data in enumerate(test_dataloader, 0):
+    #     test_img, test_label = data
+    #     test_img, test_label = test_img.to(device), test_label.to(device)
+    #     perturbation = pretrained_G(test_img)
+    #     perturbation = torch.clamp(perturbation, -0.3, 0.3)
+    #     adv_img = perturbation + test_img
+    #     adv_img = torch.clamp(adv_img, 0, 1)
+    #     pred_lab = torch.argmax(target_model(adv_img),1)
+    #     num_correct += torch.sum(pred_lab==test_label,0)
+    #
+    # print('num_correct: ', num_correct.item())
+    # print('accuracy of adv imgs in testing set: %f\n'%(num_correct.item()/len(mnist_dataset_test)))
 
-    print('MNIST training dataset:')
-    print('num_correct: ', num_correct.item())
-    print('accuracy of adv imgs in training set: %f\n'%(num_correct.item()/len(mnist_dataset)))
-
-    # test adversarial examples in MNIST testing dataset
-    mnist_dataset_test = torchvision.datasets.MNIST('./dataset', train=False, transform=transforms.ToTensor(), download=True)
-    test_dataloader = DataLoader(mnist_dataset_test, batch_size=batch_size, shuffle=False, num_workers=1)
-    num_correct = 0
-    for i, data in enumerate(test_dataloader, 0):
-        test_img, test_label = data
-        test_img, test_label = test_img.to(device), test_label.to(device)
-        perturbation = pretrained_G(test_img)
-        perturbation = torch.clamp(perturbation, -0.3, 0.3)
-        adv_img = perturbation + test_img
-        adv_img = torch.clamp(adv_img, 0, 1)
-        pred_lab = torch.argmax(target_model(adv_img),1)
-        num_correct += torch.sum(pred_lab==test_label,0)
-
-    print('num_correct: ', num_correct.item())
-    print('accuracy of adv imgs in testing set: %f\n'%(num_correct.item()/len(mnist_dataset_test)))
-
+if __name__ == "__main__":
+    adversarial_attack()
