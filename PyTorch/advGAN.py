@@ -146,7 +146,7 @@ class AdvGAN_Attack:
                    loss_perturb_sum/num_batch, loss_adv_sum/num_batch))
 
             # save generator
-            if epoch%10==0:
+            if epoch%1==0:
                 netG_file_name = models_path + 'cifar_epoch_' + str(epoch) + '.pth'
                 torch.save(self.netG.state_dict(), netG_file_name)
 

@@ -34,20 +34,24 @@ class Discriminator(nn.Module):
     def __init__(self, image_nc):
         super(Discriminator, self).__init__()
         # MNIST: 1*28*28
+        # CIFAR: 3*32*32
         model = [
             nn.Conv2d(image_nc, 8, kernel_size=4, stride=2, padding=0, bias=True),
             nn.LeakyReLU(0.2),
             # 8*13*13
+            # 8*15*15
             nn.Conv2d(8, 16, kernel_size=4, stride=2, padding=0, bias=True),
             nn.BatchNorm2d(16),
             nn.LeakyReLU(0.2),
             # 16*5*5
+            # 16*6*6
             nn.Conv2d(16, 32, kernel_size=4, stride=2, padding=0, bias=True),
             nn.BatchNorm2d(32),
             nn.LeakyReLU(0.2),
             nn.Conv2d(32, 1, 1),
             nn.Sigmoid()
             # 32*1*1
+            # 32*2*2
         ]
         self.model = nn.Sequential(*model)
 
@@ -65,18 +69,22 @@ class Generator(nn.Module):
 
         encoder_lis = [
             # MNIST:1*28*28
+            # CIFAR:3*32*32
             nn.Conv2d(gen_input_nc, 8, kernel_size=3, stride=1, padding=0, bias=True),
             nn.InstanceNorm2d(8),
-            nn.ReLU(),
+            nn.ReLU(), 
             # 8*26*26
+            # 8*30*30
             nn.Conv2d(8, 16, kernel_size=3, stride=2, padding=0, bias=True),
             nn.InstanceNorm2d(16),
             nn.ReLU(),
             # 16*12*12
+            # 16*14*14
             nn.Conv2d(16, 32, kernel_size=3, stride=2, padding=0, bias=True),
             nn.InstanceNorm2d(32),
             nn.ReLU(),
             # 32*5*5
+            # 32*6*6
         ]
 
         bottle_neck_lis = [ResnetBlock(32),
