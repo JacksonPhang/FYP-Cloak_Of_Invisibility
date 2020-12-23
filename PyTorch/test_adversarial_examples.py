@@ -1,6 +1,7 @@
 import torch
 import torchvision.datasets
 import torchvision.transforms as transforms
+from torchvision.utils import save_image
 from torch.utils.data import DataLoader
 import models
 from models import MNIST_target_net
@@ -37,7 +38,7 @@ if __name__ == "__main__":
         transforms.ToTensor()
     ])
 
-    image = Image.open('./dataset/input/input_img.jpg')
+    image = Image.open('./IO_images/input_img.jpg')
     image = data_transforms(image)
     image.unsqueeze_(1)
     x = image.to(device)
@@ -45,7 +46,9 @@ if __name__ == "__main__":
     perturbation = torch.clamp(perturbation, -0.3, 0.3)
     adv_img = perturbation + image
     adv_img = torch.clamp(adv_img, 0, 1)
+    plt.axis('off')
     plt.imshow(np.transpose(adv_img[0].detach().numpy(), (1, 2, 0)))
+    plt.savefig('./IO_images/output_img.jpg', bbox_inches='tight')
     plt.show()
 
     # test adversarial examples in MNIST training dataset
