@@ -4,7 +4,10 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 import torch.nn.functional as F
 from models import  MNIST_target_net
-
+from resnet import CifarResNet
+from resnet import BasicBlock
+import matplotlib.pyplot as plt
+import numpy as np
 
 if __name__ == "__main__":
     use_cuda = True
@@ -15,11 +18,11 @@ if __name__ == "__main__":
     print("CUDA Available: ", torch.cuda.is_available())
     device = torch.device("cuda" if (use_cuda and torch.cuda.is_available()) else "cpu")
 
-    mnist_dataset = torchvision.datasets.MNIST('./dataset', train=True, transform=transforms.ToTensor(), download=True)
+    mnist_dataset = torchvision.datasets.CIFAR100('./dataset', train=True, transform=transforms.ToTensor(), download=True)
     train_dataloader = DataLoader(mnist_dataset, batch_size=batch_size, shuffle=False, num_workers=1)
 
     # training the target model
-    target_model = MNIST_target_net().to(device)
+    target_model = CifarResNet(BasicBlock, [9, 9, 9]).to(device)
     target_model.train()
     opt_model = torch.optim.Adam(target_model.parameters(), lr=0.001)
     epochs = 40
