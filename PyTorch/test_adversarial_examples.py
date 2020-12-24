@@ -11,6 +11,9 @@ from PIL import Image
 from resnet import CifarResNet
 from resnet import BasicBlock
 
+MAX_PERTURB_LEVEL = 100
+MAX_SCALED_PERTURB_LEVEL = 5
+
 def adversarial_attack(perturb_level):
     use_cuda=True
     image_nc=3
@@ -46,6 +49,7 @@ def adversarial_attack(perturb_level):
     x = image.to(device)
     perturbation = pretrained_G(x)
     perturbation = torch.clamp(perturbation, -0.3, 0.3)
+    perturb_level = perturb_level*MAX_SCALED_PERTURB_LEVEL/MAX_PERTURB_LEVEL
     perturbation = perturbation/perturb_level
     adv_img = perturbation + image
     adv_img = torch.clamp(adv_img, 0, 1)
@@ -90,4 +94,4 @@ def adversarial_attack(perturb_level):
     # print('accuracy of adv imgs in testing set: %f\n'%(num_correct.item()/len(mnist_dataset_test)))
 
 if __name__ == "__main__":
-    adversarial_attack(2)
+    adversarial_attack(50)
