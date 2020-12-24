@@ -10,7 +10,7 @@ import numpy as np
 from PIL import Image
 
 
-def adversarial_attack():
+def adversarial_attack(perturb_level):
     use_cuda=True
     image_nc=1
     batch_size = 128
@@ -34,21 +34,22 @@ def adversarial_attack():
     pretrained_G.eval()
 
     data_transforms = transforms.Compose([
-        transforms.RandomResizedCrop(1000),
+        transforms.RandomResizedCrop(1000, ratio=(1, 1)),
         transforms.ToTensor()
     ])
 
-    image = Image.open('./IO_images/input_img.jpg')
+    image = Image.open('./IO_images/input_img.png')
     image = data_transforms(image)
     image.unsqueeze_(1)
     x = image.to(device)
     perturbation = pretrained_G(x)
     perturbation = torch.clamp(perturbation, -0.3, 0.3)
+    perturbation = perturbation/perturb_level
     adv_img = perturbation + image
     adv_img = torch.clamp(adv_img, 0, 1)
     plt.axis('off')
     plt.imshow(np.transpose(adv_img[0].detach().numpy(), (1, 2, 0)))
-    plt.savefig('./IO_images/output_img.jpg', bbox_inches='tight')
+    plt.savefig('./IO_images/output_img.png', bbox_inches='tight')
     plt.show()
 
     # # test adversarial examples in MNIST training dataset
@@ -87,4 +88,4 @@ def adversarial_attack():
     # print('accuracy of adv imgs in testing set: %f\n'%(num_correct.item()/len(mnist_dataset_test)))
 
 if __name__ == "__main__":
-    adversarial_attack()
+    adversarial_attack(2)
