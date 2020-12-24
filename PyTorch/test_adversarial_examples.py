@@ -8,11 +8,12 @@ from models import MNIST_target_net
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
-
+from resnet import CifarResNet
+from resnet import BasicBlock
 
 if __name__ == "__main__":
     use_cuda=True
-    image_nc=1
+    image_nc=3
     batch_size = 128
 
     gen_input_nc = image_nc
@@ -22,13 +23,13 @@ if __name__ == "__main__":
     device = torch.device("cuda" if (use_cuda and torch.cuda.is_available()) else "cpu")
 
     # load the pretrained model
-    pretrained_model = "./MNIST_target_model.pth"
-    target_model = MNIST_target_net().to(device)
+    pretrained_model = "./CIFAR100_target_model.pth"
+    target_model = CifarResNet(BasicBlock, [9, 9, 9]).to(device)
     target_model.load_state_dict(torch.load(pretrained_model))
     target_model.eval()
 
     # load the generator of adversarial examples
-    pretrained_generator_path = './models/netG_epoch_60.pth'
+    pretrained_generator_path = './models/cifar_epoch_20.pth'
     pretrained_G = models.Generator(gen_input_nc, image_nc).to(device)
     pretrained_G.load_state_dict(torch.load(pretrained_generator_path))
     pretrained_G.eval()
@@ -40,7 +41,8 @@ if __name__ == "__main__":
 
     image = Image.open('./IO_images/input_img.jpg')
     image = data_transforms(image)
-    image.unsqueeze_(1)
+    image.unsqueeze_(0)
+    image.expand(3,3,256,256)
     x = image.to(device)
     perturbation = pretrained_G(x)
     perturbation = torch.clamp(perturbation, -0.3, 0.3)
@@ -52,7 +54,7 @@ if __name__ == "__main__":
     plt.show()
 
     # test adversarial examples in MNIST training dataset
-    mnist_dataset = torchvision.datasets.MNIST('./dataset', train=True, transform=transforms.ToTensor(), download=True)
+    mnist_dataset = torchvision.datasets.CIFAR100('./dataset', train=True, transform=transforms.ToTensor(), download=True)
     train_dataloader = DataLoader(mnist_dataset, batch_size=batch_size, shuffle=False, num_workers=1)
     num_correct = 0
     for i, data in enumerate(train_dataloader, 0):
