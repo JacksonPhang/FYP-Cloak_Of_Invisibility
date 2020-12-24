@@ -35,11 +35,11 @@ def adversarial_attack(perturb_level):
     pretrained_G.eval()
 
     data_transforms = transforms.Compose([
-        transforms.RandomResizedCrop(1000, ratio=(1, 1)),
+        transforms.RandomResizedCrop(256, ratio=(1, 1)),
         transforms.ToTensor()
     ])
 
-    image = Image.open('./IO_images/input_img.png')
+    image = Image.open('./IO_images/input_img.jpg')
     image = data_transforms(image)
     image.unsqueeze_(0)
     image.expand(3,3,256,256)
@@ -51,7 +51,7 @@ def adversarial_attack(perturb_level):
     adv_img = torch.clamp(adv_img, 0, 1)
     plt.axis('off')
     plt.imshow(np.transpose(adv_img[0].detach().numpy(), (1, 2, 0)))
-    plt.savefig('./IO_images/output_img.png', bbox_inches='tight')
+    plt.savefig('./IO_images/output_img.jpg', bbox_inches='tight')
     plt.show()
 
     # # test adversarial examples in MNIST training dataset
