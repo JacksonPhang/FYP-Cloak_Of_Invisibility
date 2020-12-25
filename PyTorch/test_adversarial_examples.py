@@ -3,6 +3,7 @@ import torchvision.datasets
 import torchvision.transforms as transforms
 from torchvision.utils import save_image
 from torch.utils.data import DataLoader
+from torch.autograd import Variable
 import models
 from models import MNIST_target_net
 import matplotlib.pyplot as plt
@@ -16,30 +17,31 @@ MAX_SCALED_PERTURB_LEVEL = 5
 output_directory = "./IO_images/output_img.jpg"
 
 def adversarial_attack(dataset, perturb_level, input_directory = None):
-    if dataset == "cifar":
-        image_nc = 3
-        pretrained_model = "./CIFAR100_target_model.pth"
-        pretrained_generator_path = "./models/cifar_epoch_60.pth"
-    else:
-        image_nc = 1
-        pretrained_model = "./MNIST_target_model.pth"
-        pretrained_generator_path = "./models/netG_epoch_60.pth"
     use_cuda=True
-    batch_size = 128
-    gen_input_nc = image_nc
-
     # Define what device we are using
     print("CUDA Available: ",torch.cuda.is_available())
     device = torch.device("cuda" if (use_cuda and torch.cuda.is_available()) else "cpu")
 
+    if dataset == "cifar":
+        image_nc = 3
+        pretrained_model = "./CIFAR100_target_model.pth"
+        pretrained_generator_path = "./models/cifar_epoch_60.pth"
+        target_model = CifarResNet(BasicBlock, [9, 9, 9]).to(device)
+    else:
+        image_nc = 1
+        pretrained_model = "./MNIST_target_model.pth"
+        pretrained_generator_path = "./models/netG_epoch_60.pth"
+        target_model = MNIST_target_net().to(device)
+    batch_size = 128
+    gen_input_nc = image_nc
+
     # load the pretrained model
-    target_model = CifarResNet(BasicBlock, [9, 9, 9]).to(device)
     target_model.load_state_dict(torch.load(pretrained_model))
     target_model.eval()
 
     # load the generator of adversarial examples
     pretrained_G = models.Generator(gen_input_nc, image_nc).to(device)
-    pretrained_G.load_state_dict(torch.load(pretrained_generator_path))
+    pretrained_G.load_state_dict(torch.load(pretrained_generator_path, map_location=torch.device('cpu')))
     pretrained_G.eval()
 
     data_transforms = transforms.Compose([
@@ -49,7 +51,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
     # load input image
     if not input_directory:
-        image = Image.open("./IO_images/input_img.jpg")
+        image = Image.open("./IO_images/input_test.jpg")
     else:
         image = Image.open(input_directory)
     image = data_transforms(image)
@@ -70,18 +72,27 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     plt.savefig(output_directory, bbox_inches='tight')
     plt.show()
 
+    # Input = Variable(image)
+    # Input = Input.to(device)
+    # output = target_model(Input)
+    # print(output)
+    # index = output.data.cpu().numpy().argmax()
+    # return (index)
 
-def test_accuracy(dataset, input_directory=None):
+def test_accuracy(dataset, index, input_directory=None):
     if dataset == "cifar":
         target_dataset = torchvision.datasets.CIFAR100('./dataset', train=True, transform=transforms.ToTensor(), download=True)
+        classes = target_dataset.classes
+        print(classes[index])
     else:
         target_dataset = torchvision.datasets.MNIST('./dataset', train=True, transform=transforms.ToTensor(), download=True)
 
-    if not input_directory:
+    if input_directory is not None:
         ori_image = Image.open(input_directory)
     else:
         ori_image = Image.open("./IO_images/input_img.jpg")
     pert_image = Image.open(output_directory)
+
 
     
     
@@ -121,4 +132,5 @@ def test_accuracy(dataset, input_directory=None):
     # print('accuracy of adv imgs in testing set: %f\n'%(num_correct.item()/len(mnist_dataset_test)))
 
 if __name__ == "__main__":
-    adversarial_attack(50)
+    ans = adversarial_attack('cifar',50)
+    test_accuracy('cifar', ans)
