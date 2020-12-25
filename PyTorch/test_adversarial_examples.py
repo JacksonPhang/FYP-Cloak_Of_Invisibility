@@ -13,6 +13,7 @@ from resnet import BasicBlock
 
 MAX_PERTURB_LEVEL = 100
 MAX_SCALED_PERTURB_LEVEL = 5
+output_directory = "./IO_images/output_img.jpg"
 
 def adversarial_attack(dataset, perturb_level, input_directory = None):
     if dataset == "cifar":
@@ -22,7 +23,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     else:
         image_nc = 1
         pretrained_model = "./MNIST_target_model.pth"
-        pretrained_generator_path = './models/netG_epoch_60.pth'
+        pretrained_generator_path = "./models/netG_epoch_60.pth"
     use_cuda=True
     batch_size = 128
     gen_input_nc = image_nc
@@ -48,7 +49,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
     # load input image
     if not input_directory:
-        image = Image.open('./IO_images/input_img.jpg')
+        image = Image.open("./IO_images/input_img.jpg")
     else:
         image = Image.open(input_directory)
     image = data_transforms(image)
@@ -66,9 +67,24 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     adv_img = torch.clamp(adv_img, 0, 1)
     plt.axis('off')
     plt.imshow(np.transpose(adv_img[0].detach().numpy(), (1, 2, 0)))
-    plt.savefig('./IO_images/output_img.jpg', bbox_inches='tight')
+    plt.savefig(output_directory, bbox_inches='tight')
     plt.show()
 
+
+def test_accuracy(dataset, input_directory=None):
+    if dataset == "cifar":
+        target_dataset = torchvision.datasets.CIFAR100('./dataset', train=True, transform=transforms.ToTensor(), download=True)
+    else:
+        target_dataset = torchvision.datasets.MNIST('./dataset', train=True, transform=transforms.ToTensor(), download=True)
+
+    if not input_directory:
+        ori_image = Image.open(input_directory)
+    else:
+        ori_image = Image.open("./IO_images/input_img.jpg")
+    pert_image = Image.open(output_directory)
+
+    
+    
     # # test adversarial examples in MNIST training dataset
     # mnist_dataset = torchvision.datasets.MNIST('./dataset', train=True, transform=transforms.ToTensor(), download=True)
     # train_dataloader = DataLoader(mnist_dataset, batch_size=batch_size, shuffle=False, num_workers=1)
