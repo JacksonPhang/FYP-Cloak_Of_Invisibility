@@ -14,11 +14,17 @@ from resnet import BasicBlock
 MAX_PERTURB_LEVEL = 100
 MAX_SCALED_PERTURB_LEVEL = 5
 
-def adversarial_attack(perturb_level):
+def adversarial_attack(dataset, perturb_level, input_directory = None):
+    if dataset == "cifar":
+        image_nc = 3
+        pretrained_model = "./CIFAR100_target_model.pth"
+        pretrained_generator_path = "./models/cifar_epoch_60.pth"
+    else:
+        image_nc = 1
+        pretrained_model = "./MNIST_target_model.pth"
+        pretrained_generator_path = './models/netG_epoch_60.pth'
     use_cuda=True
-    image_nc=3
     batch_size = 128
-
     gen_input_nc = image_nc
 
     # Define what device we are using
@@ -26,13 +32,11 @@ def adversarial_attack(perturb_level):
     device = torch.device("cuda" if (use_cuda and torch.cuda.is_available()) else "cpu")
 
     # load the pretrained model
-    pretrained_model = "./CIFAR100_target_model.pth"
     target_model = CifarResNet(BasicBlock, [9, 9, 9]).to(device)
     target_model.load_state_dict(torch.load(pretrained_model))
     target_model.eval()
 
     # load the generator of adversarial examples
-    pretrained_generator_path = './models/cifar_epoch_20.pth'
     pretrained_G = models.Generator(gen_input_nc, image_nc).to(device)
     pretrained_G.load_state_dict(torch.load(pretrained_generator_path))
     pretrained_G.eval()
@@ -42,10 +46,17 @@ def adversarial_attack(perturb_level):
         transforms.ToTensor()
     ])
 
-    image = Image.open('./IO_images/input_img.jpg')
+    # load input image
+    if not input_directory:
+        image = Image.open('./IO_images/input_img.jpg')
+    else:
+        image = Image.open(input_directory)
     image = data_transforms(image)
-    image.unsqueeze_(0)
-    image.expand(3,3,256,256)
+    if dataset == "cifar":
+        image.unsqueeze_(0)
+        image.expand(3,3,256,256)
+    else:
+        image.unsqueeze_(1)
     x = image.to(device)
     perturbation = pretrained_G(x)
     perturbation = torch.clamp(perturbation, -0.3, 0.3)
