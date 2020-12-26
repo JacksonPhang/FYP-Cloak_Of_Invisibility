@@ -25,7 +25,6 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.imageUpload = MyQLabel(Form, self)
-        self.imageUpload.setText("")
         self.imageUpload.setPixmap(QtGui.QPixmap("Screenshot (106).png"), False)
         self.imageUpload.setScaledContents(True)
         self.imageUpload.setObjectName("imageUpload")
@@ -114,7 +113,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.inputTextEdit.setPlainText(_translate("Form", "Input File Path"))
         self.perturbationLabel.setText(_translate("Form", "Perturbation Level:"))
         self.mnistCheckBox.setText(_translate("Form", "MNIST"))
-        self.cifarCheckBox.setText(_translate("Form", "CIFAR10"))
+        self.cifarCheckBox.setText(_translate("Form", "CIFAR"))
         self.learnButton.setText(_translate("Form", "Learn More"))
 
     #####################################################################################################
@@ -125,7 +124,15 @@ class Ui_FormOne(QtWidgets.QWidget):
         Generate Button Functionality
 
         Changes the selection of the application to the second page
-        """  
+        """
+        popup = QtWidgets.QMessageBox()
+        popup.setWindowTitle("Application Information")
+        popup.setWindowModality(QtCore.Qt.ApplicationModal)
+        popup.setIcon(QtWidgets.QMessageBox.Information)
+        popup.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        popup.setText("Application Generating Perturbated Image")
+        popup.exec_()
+
         # Change to second page
         self._parent.stackWidget.setCurrentIndex(1)
 

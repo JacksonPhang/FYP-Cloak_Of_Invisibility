@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from accepted_file_input import getAcceptInput
+import getpass
 
 class Ui_FormTwo(QtWidgets.QWidget):
     """
@@ -23,7 +24,6 @@ class Ui_FormTwo(QtWidgets.QWidget):
         self.gridLayout = QtWidgets.QGridLayout(Form)
         self.gridLayout.setObjectName("gridLayout")
         self.imageOutput = QtWidgets.QLabel(Form)
-        self.imageOutput.setText("")
         self.imageOutput.setPixmap(QtGui.QPixmap(self.file_path))
         self.imageOutput.setScaledContents(True)
         self.imageOutput.setObjectName("imageOutput")
@@ -86,16 +86,30 @@ class Ui_FormTwo(QtWidgets.QWidget):
         # Change to first page
         self._parent.stackWidget.setCurrentIndex(0)
 
+    def compareButtonFunction(self):
+        """
+        Compare Image Button Functionality
+
+        Changes the selection of the application to the first page
+        """ 
+        popup = QtWidgets.QMessageBox()
+        popup.setWindowTitle("Application Information")
+        popup.setWindowModality(QtCore.Qt.ApplicationModal)
+        popup.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        popup.setText("Computer Science Final Year Project\nCloak Of Invisibility")
+        popup.setIconPixmap(QtGui.QPixMap(""))
+
     def saveButtonFunction(self):
         """
         Save Button Functionality
 
         Saves the image into local storage
-        """ 
+        """
+        read_file_path = "C:/Users/" + getpass.getuser() + "/Desktop/FYP-Cloak_Of_Invisibility/PyTorch/IO_images/output_img.jpg"
         fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self, "File Browser", "", "Image Files " + getAcceptInput())
         if fileName:
             print(fileName)
-            with open(self.file_path, "rb") as read_file, open(fileName, "wb") as write_file:
+            with open(read_file_path, "rb") as read_file, open(fileName, "wb") as write_file:
                 for data in read_file:
                     write_file.write(data)
 
