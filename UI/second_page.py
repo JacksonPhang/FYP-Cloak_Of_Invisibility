@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from os.path import dirname, abspath
 from accepted_file_input import getAcceptInput
 import getpass
 
@@ -16,7 +17,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
         """
         super().__init__()
         self._parent = parent
-        self.file_path = ".\\Screenshot (106).png"
+        self.file_path = dirname(dirname(abspath(__file__))) + "\\PyTorch\\IO_images\\output_img.jpg"
 
         Form = QtWidgets.QWidget()
         Form.setObjectName("Form")
@@ -43,6 +44,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
         self.compareButton.setDefault(False)
         self.compareButton.setFlat(False)
         self.compareButton.setObjectName("compareButton")
+        self.compareButton.clicked.connect(self.compareButtonFunction)
         self.verticalLayout.addWidget(self.compareButton)
         self.listView = QtWidgets.QListView(Form)
         self.listView.setObjectName("listView")
@@ -70,7 +72,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.outputLabel.setText(_translate("Form", "OUTPUT"))
-        self.compareButton.setText(_translate("Form", "COMPARE  WITH CLASSIFIERS"))
+        self.compareButton.setText(_translate("Form", "COMPARE  IMAGES"))
         self.differentImageButton.setText(_translate("Form", "TRY DIFFERENT IMAGE"))
         self.saveButton.setText(_translate("Form", "SAVE IMAGE"))
 
@@ -90,14 +92,14 @@ class Ui_FormTwo(QtWidgets.QWidget):
         """
         Compare Image Button Functionality
 
-        Changes the selection of the application to the first page
+        Compare the input inmage with the output image
         """ 
         popup = QtWidgets.QMessageBox()
         popup.setWindowTitle("Application Information")
         popup.setWindowModality(QtCore.Qt.ApplicationModal)
         popup.setStandardButtons(QtWidgets.QMessageBox.Ok)
         popup.setText("Computer Science Final Year Project\nCloak Of Invisibility")
-        popup.setIconPixmap(QtGui.QPixMap(""))
+        popup.setIconPixmap(QtGui.QPixmap(""))
 
     def saveButtonFunction(self):
         """
@@ -105,11 +107,9 @@ class Ui_FormTwo(QtWidgets.QWidget):
 
         Saves the image into local storage
         """
-        read_file_path = "C:/Users/" + getpass.getuser() + "/Desktop/FYP-Cloak_Of_Invisibility/PyTorch/IO_images/output_img.jpg"
         fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self, "File Browser", "", "Image Files " + getAcceptInput())
         if fileName:
-            print(fileName)
-            with open(read_file_path, "rb") as read_file, open(fileName, "wb") as write_file:
+            with open(self.file_path, "rb") as read_file, open(fileName, "wb") as write_file:
                 for data in read_file:
                     write_file.write(data)
 
