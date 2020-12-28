@@ -37,4 +37,4 @@ class MyQPlainTextEdit(QtWidgets.QPlainTextEdit):
         Checks whether the file path provided 
         references an image file
         """
-        return file.split(".")[-1] in ACCEPTED_INPUT_FILE
+        return file.split(".")[-1] in self._parent.getInput()

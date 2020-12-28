@@ -1,6 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from first_page import Ui_FormOne
-from second_page import Ui_FormTwo
+import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "\\UI")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "\\PyTorch")
+
+
+from UI.first_page import Ui_FormOne
+from UI.second_page import Ui_FormTwo
 
 class main_ui(QtWidgets.QWidget):
     """
@@ -57,19 +64,6 @@ class main_ui(QtWidgets.QWidget):
         """
         # print(self.firstPageUI.file_path)
         return self.firstPageUI.file_path
-
-    def getCheckBox(self):
-        """ (Testing With Backend Required)
-        Helper Function
-
-        Used to obtain the checkbox value from the
-        user
-        """
-        checkbox_value = {
-            1: "CIFAR10",
-            2: "MNIST"
-        }
-        return checkbox_value.get(self.buttonGroup.checkedId(), "Error")
 
 if __name__ == "__main__":
     import sys

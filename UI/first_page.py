@@ -1,7 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from my_qlabel import MyQLabel
-from my_qplaintextedit import MyQPlainTextEdit
+import os
+from first_page_modules.my_qlabel import MyQLabel
+from first_page_modules.my_qplaintextedit import MyQPlainTextEdit
 from accepted_file_input import getAcceptInput
+from PyTorch.test_adversarial_examples import adversarial_attack
               
 class Ui_FormOne(QtWidgets.QWidget):
     """
@@ -25,7 +27,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.imageUpload = MyQLabel(Form, self)
-        self.imageUpload.setPixmap(QtGui.QPixmap("Screenshot (106).png"), False)
+        self.imageUpload.setPixmap(QtGui.QPixmap(os.path.dirname(os.path.abspath(__file__)) + "\images\Screenshot (106).png"), False)
         self.imageUpload.setScaledContents(True)
         self.imageUpload.setObjectName("imageUpload")
         self.gridLayout_2.addWidget(self.imageUpload, 0, 0, 1, 2)
@@ -125,13 +127,17 @@ class Ui_FormOne(QtWidgets.QWidget):
 
         Changes the selection of the application to the second page
         """
+        # adversarial_attack(dataset, perturb_level, input_directory = None)
         popup = QtWidgets.QMessageBox()
         popup.setWindowTitle("Application Information")
         popup.setWindowModality(QtCore.Qt.ApplicationModal)
         popup.setIcon(QtWidgets.QMessageBox.Information)
         popup.setStandardButtons(QtWidgets.QMessageBox.Ok)
         popup.setText("Application Generating Perturbated Image")
+        popup.setInformativeText("Click Ok to continue\nApplication will automatically switch to next page when image has been generated")
         popup.exec_()
+
+        # adversarial_attack(dataset = self.getCheckBox(), perturb_level = self.perturbationSpinBox.value, input_directory = self.file_path)
 
         # Change to second page
         self._parent.stackWidget.setCurrentIndex(1)
@@ -179,5 +185,21 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.inputTextEdit.clear()
         self.inputTextEdit.setPlainText(_translate("Form", fileName))
 
+    def getInput(self, boolean = False):
+        return getAcceptInput(boolean)
+
     def setPixMap(self, file_path):
         self.inputTextEdit.setPixmap(QtGui.QPixmap(file_path).scaled(1580, 880, QtCore.Qt.KeepAspectRatio))
+
+    def getCheckBox(self):
+        """ (Testing With Backend Required)
+        Helper Function
+
+        Used to obtain the checkbox value from the
+        user
+        """
+        checkbox_value = {
+            1: "CIFAR",
+            2: "MNIST"
+        }
+        return checkbox_value.get(self.buttonGroup.checkedId(), "Error")
