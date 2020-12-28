@@ -116,12 +116,10 @@ class Ui_FormTwo(QtWidgets.QWidget):
     #####################################################################################################
     #                                         Helper Functions                                          #
     #####################################################################################################
-    def setFilePathAndImage(self, file):
+    def setImage(self):
         """
         Helper Function
 
-        Used to set the file path of the perturbed image file
-        to class reference
+        Used to set the image based on the file path
         """
-        self.file_path = file
-        self.imageOutput.setPixmap(QtGui.QPixmap(file))
+        self.imageOutput.setPixmap(QtGui.QPixmap(self.file_path))

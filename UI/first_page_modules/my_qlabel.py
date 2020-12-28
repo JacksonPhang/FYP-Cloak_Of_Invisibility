@@ -58,7 +58,6 @@ class MyQLabel(QtWidgets.QLabel):
         if event.mimeData().hasImage:
             event.setDropAction(QtCore.Qt.CopyAction)
             file_path = event.mimeData().urls()[0].toLocalFile()
-            print(file_path)
             self.setPixmap(QtGui.QPixmap(file_path))
             self._parent.setFilePath(file_path)
 

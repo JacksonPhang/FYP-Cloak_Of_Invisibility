@@ -5,7 +5,6 @@ import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "\\UI")
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "\\PyTorch")
 
-
 from UI.first_page import Ui_FormOne
 from UI.second_page import Ui_FormTwo
 
@@ -32,11 +31,11 @@ class main_ui(QtWidgets.QWidget):
         ##############################################
         mainLayout = QtWidgets.QVBoxLayout()
         self.firstPageUI = Ui_FormOne(self)
-        secondPageUI = Ui_FormTwo(self)
+        self.secondPageUI = Ui_FormTwo(self)
 
         self.stackWidget = QtWidgets.QStackedWidget()
         self.stackWidget.addWidget(self.firstPageUI) # Index 0
-        self.stackWidget.addWidget(secondPageUI) # Index 1
+        self.stackWidget.addWidget(self.secondPageUI) # Index 1
 
         mainLayout.addWidget(self.stackWidget)
         self.setLayout(mainLayout)

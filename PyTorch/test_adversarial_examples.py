@@ -1,4 +1,5 @@
 import torch
+from os.path import dirname, abspath
 import torchvision.datasets
 import torchvision.transforms as transforms
 from torchvision.utils import save_image
@@ -14,9 +15,13 @@ from resnet import BasicBlock
 
 MAX_PERTURB_LEVEL = 100
 MAX_SCALED_PERTURB_LEVEL = 5
-output_directory = "./IO_images/output_img.jpg"
+relative_directory = dirname(abspath(__file__))
+output_directory = relative_directory + "\\IO_images\\output_img.jpg"
 
 def adversarial_attack(dataset, perturb_level, input_directory = None):
+    print(dataset)
+    print(perturb_level)
+    print(input_directory)
     use_cuda=True
     # Define what device we are using
     print("CUDA Available: ",torch.cuda.is_available())
@@ -24,13 +29,13 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
     if dataset == "cifar":
         image_nc = 3
-        pretrained_model = "./CIFAR100_target_model.pth"
-        pretrained_generator_path = "./models/cifar_epoch_60.pth"
+        pretrained_model = relative_directory + "\\CIFAR100_target_model.pth"
+        pretrained_generator_path = relative_directory + "\\models\\cifar_epoch_60.pth"
         target_model = CifarResNet(BasicBlock, [9, 9, 9]).to(device)
     else:
         image_nc = 1
-        pretrained_model = "./MNIST_target_model.pth"
-        pretrained_generator_path = "./models/netG_epoch_60.pth"
+        pretrained_model = relative_directory + "\\MNIST_target_model.pth"
+        pretrained_generator_path = relative_directory + "\\models\\netG_epoch_60.pth"
         target_model = MNIST_target_net().to(device)
     batch_size = 128
     gen_input_nc = image_nc
@@ -51,7 +56,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
     # load input image
     if not input_directory:
-        image = Image.open("./IO_images/input_test.jpg")
+        image = Image.open(relative_directory + "\\IO_images\\input_test.jpg")
     else:
         image = Image.open(input_directory)
     image = data_transforms(image)
@@ -81,16 +86,16 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
 def test_accuracy(dataset, index, input_directory=None):
     if dataset == "cifar":
-        target_dataset = torchvision.datasets.CIFAR100('./dataset', train=True, transform=transforms.ToTensor(), download=True)
+        target_dataset = torchvision.datasets.CIFAR100(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
         classes = target_dataset.classes
         print(classes[index])
     else:
-        target_dataset = torchvision.datasets.MNIST('./dataset', train=True, transform=transforms.ToTensor(), download=True)
+        target_dataset = torchvision.datasets.MNIST(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
 
     if input_directory is not None:
         ori_image = Image.open(input_directory)
     else:
-        ori_image = Image.open("./IO_images/input_img.jpg")
+        ori_image = Image.open(relative_directory + "\\IO_images\\input_img.jpg")
     pert_image = Image.open(output_directory)
 
 

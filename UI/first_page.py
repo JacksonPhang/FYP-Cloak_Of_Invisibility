@@ -27,7 +27,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.imageUpload = MyQLabel(Form, self)
-        self.imageUpload.setPixmap(QtGui.QPixmap(os.path.dirname(os.path.abspath(__file__)) + "\images\Screenshot (106).png"), False)
+        self.imageUpload.setPixmap(QtGui.QPixmap(os.path.dirname(os.path.abspath(__file__)) + "\\images\\Screenshot (106).png"), False)
         self.imageUpload.setScaledContents(True)
         self.imageUpload.setObjectName("imageUpload")
         self.gridLayout_2.addWidget(self.imageUpload, 0, 0, 1, 2)
@@ -137,7 +137,8 @@ class Ui_FormOne(QtWidgets.QWidget):
         popup.setInformativeText("Click Ok to continue\nApplication will automatically switch to next page when image has been generated")
         popup.exec_()
 
-        # adversarial_attack(dataset = self.getCheckBox(), perturb_level = self.perturbationSpinBox.value, input_directory = self.file_path)
+        adversarial_attack(self.getCheckBox(), self.perturbationSpinBox.value(), self.file_path)
+        self._parent.secondPageUI.setImage()
 
         # Change to second page
         self._parent.stackWidget.setCurrentIndex(1)
@@ -195,11 +196,10 @@ class Ui_FormOne(QtWidgets.QWidget):
         """ (Testing With Backend Required)
         Helper Function
 
-        Used to obtain the checkbox value from the
-        user
+        Used to obtain the checkbox value from the user
         """
         checkbox_value = {
-            1: "CIFAR",
-            2: "MNIST"
+            1: "cifar",
+            2: "mnist"
         }
         return checkbox_value.get(self.buttonGroup.checkedId(), "Error")
