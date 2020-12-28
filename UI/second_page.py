@@ -99,7 +99,8 @@ class Ui_FormTwo(QtWidgets.QWidget):
         popup.setWindowModality(QtCore.Qt.ApplicationModal)
         popup.setStandardButtons(QtWidgets.QMessageBox.Ok)
         popup.setText("Computer Science Final Year Project\nCloak Of Invisibility")
-        popup.setIconPixmap(QtGui.QPixmap(""))
+        popup.setIconPixmap(QtGui.QPixmap("").scaled(1080, 480, QtCore.Qt.KeepAspectRatio))
+        popup.exec_()
 
     def saveButtonFunction(self):
         """
@@ -122,4 +123,4 @@ class Ui_FormTwo(QtWidgets.QWidget):
 
         Used to set the image based on the file path
         """
-        self.imageOutput.setPixmap(QtGui.QPixmap(self.file_path))
+        self.imageOutput.setPixmap(QtGui.QPixmap(self.file_path).scaled(1580, 880, QtCore.Qt.KeepAspectRatio))

@@ -1,6 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from os.path import isfile
-from accepted_file_input import ACCEPTED_INPUT_FILE
 
 class MyQPlainTextEdit(QtWidgets.QPlainTextEdit):
     """
@@ -26,15 +25,7 @@ class MyQPlainTextEdit(QtWidgets.QPlainTextEdit):
         """
         if event.key() == Qt.Qt.Key_Return:
             file_path = self.toPlainText()
-            if isfile(file_path) and self.isImageFile(file_path):
-                self._parent.imageUpload.setPixmap(QtGui.QPixmap(file_path))
-                self._parent.file_path = file_path
+            if isfile(file_path) and self._parent.isImageFile(file_path):
+                self._parent.setPixMapAndPath(file_path)
         else:
             super().keyPressEvent(event)
-
-    def isImageFile(self, file):
-        """
-        Checks whether the file path provided 
-        references an image file
-        """
-        return file.split(".")[-1] in self._parent.getInput()

@@ -151,8 +151,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         """
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "File Browser", "","Image Files " + getAcceptInput())
         if fileName:
-            self.imageUpload.setPixmap(QtGui.QPixmap(fileName))
-            self.setFilePath(fileName)
+            self.setPixMapAndPath(fileName)
 
     def learnButtonFunction(self):
         """
@@ -174,26 +173,29 @@ class Ui_FormOne(QtWidgets.QWidget):
     #####################################################################################################
     #                                         Helper Functions                                          #
     #####################################################################################################
-    def setFilePath(self, fileName):
+    def setPixMapAndPath(self, file_path):
         """
         Helper Function
 
-        Used to set the file path of the chosen image file to
+        Scales the image before setting it to the UI
+        Sets the file path of the chosen image file to
         the text edit as a display to the user
         """
-        self.file_path = fileName
+        self.imageUpload.setPixmap(QtGui.QPixmap(file_path).scaled(1580, 880, QtCore.Qt.KeepAspectRatio))
+        self.file_path = file_path
         _translate = QtCore.QCoreApplication.translate
         self.inputTextEdit.clear()
-        self.inputTextEdit.setPlainText(_translate("Form", fileName))
+        self.inputTextEdit.setPlainText(_translate("Form", file_path))
 
-    def getInput(self, boolean = False):
-        return getAcceptInput(boolean)
-
-    def setPixMap(self, file_path):
-        self.inputTextEdit.setPixmap(QtGui.QPixmap(file_path).scaled(1580, 880, QtCore.Qt.KeepAspectRatio))
+    def isImageFile(self, file):
+        """
+        Checks whether the file path provided 
+        references an accepted image file
+        """
+        return file.split(".")[-1] in getAcceptInput(False)
 
     def getCheckBox(self):
-        """ (Testing With Backend Required)
+        """
         Helper Function
 
         Used to obtain the checkbox value from the user

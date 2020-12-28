@@ -24,7 +24,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     print(input_directory)
     use_cuda=True
     # Define what device we are using
-    print("CUDA Available: ",torch.cuda.is_available())
+    print("CUDA Available: ", torch.cuda.is_available())
     device = torch.device("cuda" if (use_cuda and torch.cuda.is_available()) else "cpu")
 
     if dataset == "cifar":

@@ -41,29 +41,6 @@ class main_ui(QtWidgets.QWidget):
         self.setLayout(mainLayout)
         ##############################################
 
-    #####################################################################################################
-    #                                         Helper Functions                                          #
-    #####################################################################################################
-    def getPerturbationVariable(self):
-        """ (Testing With Backend Required)
-        Helper Function
-
-        Used to obtain the input from the user based
-        on the UI slider
-        """
-        # print(self.firstPageUI.perturbationSpinBox.value)
-        return self.firstPageUI.perturbationSpinBox.value
-
-    def getInputImage(self):
-        """ (Testing With Backend Required)
-        Helper Function
-
-        Used to obtain the input image address from 
-        the user
-        """
-        # print(self.firstPageUI.file_path)
-        return self.firstPageUI.file_path
-
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
