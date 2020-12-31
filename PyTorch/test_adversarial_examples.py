@@ -50,7 +50,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     pretrained_G.eval()
 
     data_transforms = transforms.Compose([
-        transforms.RandomResizedCrop(256, ratio=(1, 1)),
+        transforms.RandomResizedCrop(32, ratio=(1, 1)),
         transforms.ToTensor()
     ])
 
@@ -62,7 +62,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     image = data_transforms(image)
     if dataset == "cifar":
         image.unsqueeze_(0)
-        image.expand(3,3,256,256)
+        image.expand(3,3,32,32)
     else:
         image.unsqueeze_(1)
     x = image.to(device)
@@ -77,12 +77,11 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     plt.savefig(output_directory, bbox_inches='tight')
     plt.show()
 
-    # Input = Variable(image)
-    # Input = Input.to(device)
-    # output = target_model(Input)
-    # print(output)
-    # index = output.data.cpu().numpy().argmax()
-    # return (index)
+    Input = Variable(image)
+    Input = Input.to(device)
+    output = target_model(Input)
+    index = output.data.cpu().numpy().argmax()
+    return (index)
 
 def test_accuracy(dataset, index, input_directory=None):
     if dataset == "cifar":
