@@ -19,9 +19,9 @@ relative_directory = dirname(abspath(__file__))
 output_directory = relative_directory + "\\IO_images\\output_img.jpg"
 
 def adversarial_attack(dataset, perturb_level, input_directory = None):
-    print(dataset)
-    print(perturb_level)
-    print(input_directory)
+    # print(dataset)
+    # print(perturb_level)
+    # print(input_directory)
     use_cuda=True
     # Define what device we are using
     print("CUDA Available: ", torch.cuda.is_available())
@@ -32,11 +32,13 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
         pretrained_model = relative_directory + "\\CIFAR100_target_model.pth"
         pretrained_generator_path = relative_directory + "\\models\\cifar_epoch_60.pth"
         target_model = CifarResNet(BasicBlock, [9, 9, 9]).to(device)
+        size = 32
     else:
         image_nc = 1
         pretrained_model = relative_directory + "\\MNIST_target_model.pth"
         pretrained_generator_path = relative_directory + "\\models\\netG_epoch_60.pth"
         target_model = MNIST_target_net().to(device)
+        size = 28
     batch_size = 128
     gen_input_nc = image_nc
 
@@ -50,7 +52,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     pretrained_G.eval()
 
     data_transforms = transforms.Compose([
-        transforms.RandomResizedCrop(32, ratio=(1, 1)),
+        transforms.Resize((size,size)),
         transforms.ToTensor()
     ])
 
@@ -62,7 +64,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     image = data_transforms(image)
     if dataset == "cifar":
         image.unsqueeze_(0)
-        image.expand(3,3,32,32)
+        image.expand(3,3,size,size)
     else:
         image.unsqueeze_(1)
     x = image.to(device)
@@ -90,6 +92,8 @@ def test_accuracy(dataset, index, input_directory=None):
         print(classes[index])
     else:
         target_dataset = torchvision.datasets.MNIST(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
+        classes = target_dataset.classes
+        print(classes[index])
 
     if input_directory is not None:
         ori_image = Image.open(input_directory)
