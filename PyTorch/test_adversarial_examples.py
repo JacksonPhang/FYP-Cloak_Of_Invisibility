@@ -14,7 +14,7 @@ from resnet import CifarResNet
 from resnet import BasicBlock
 
 MAX_PERTURB_LEVEL = 100
-MAX_SCALED_PERTURB_LEVEL = 5
+MAX_SCALED_PERTURB_LEVEL = 2
 relative_directory = dirname(abspath(__file__))
 output_directory = relative_directory + "\\IO_images\\output_img.jpg"
 
@@ -71,9 +71,8 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     x = image.to(device)
     perturbation = pretrained_G(x)
     perturbation = torch.clamp(perturbation, -0.3, 0.3)
-    perturb_level = perturb_level*MAX_SCALED_PERTURB_LEVEL/MAX_PERTURB_LEVEL
-    perturbation = perturbation/perturb_level
-    adv_img = perturbation + image
+    scaled_perturb_level = perturb_level * MAX_SCALED_PERTURB_LEVEL / MAX_PERTURB_LEVEL
+    adv_img = (perturbation * scaled_perturb_level) + image
     adv_img = torch.clamp(adv_img, 0, 1)
     adv_img = torch.nn.functional.interpolate(adv_img, size=(height, width))
 
@@ -143,5 +142,5 @@ def test_accuracy(dataset, index, input_directory=None):
     # print('accuracy of adv imgs in testing set: %f\n'%(num_correct.item()/len(mnist_dataset_test)))
 
 if __name__ == "__main__":
-    ans = adversarial_attack('cifar',50)
+    ans = adversarial_attack('cifar', 50)
     test_accuracy('cifar', ans)
