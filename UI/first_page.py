@@ -183,7 +183,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         Sets the file path of the chosen image file to
         the text edit as a display to the user
         """
-        self.imageUpload.setPixmap(QtGui.QPixmap(file_path).scaled(1580, 880, QtCore.Qt.KeepAspectRatio))
+        self.imageUpload.setPixmap(QtGui.QPixmap(file_path).scaled(1080, 480, QtCore.Qt.KeepAspectRatio))
         self.file_path = file_path
         _translate = QtCore.QCoreApplication.translate
         self.inputTextEdit.clear()
