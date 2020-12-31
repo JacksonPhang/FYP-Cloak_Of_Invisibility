@@ -19,17 +19,6 @@ class MyQLabel(QtWidgets.QLabel):
         self.setAcceptDrops(True)
         self.setScaledContents(True)
 
-    def setPixmap(self, pixmap, scale=True):
-        """
-        Allows class to accept image event which enters
-        the boundary of the class object
-        """
-        if scale: 
-            super().setPixmap(pixmap.scaled(1580, 880, QtCore.Qt.KeepAspectRatio))
-        else:
-            super().setPixmap(pixmap)
-
-
     def dragEnterEvent(self, event):
         """
         Override Parent Function
