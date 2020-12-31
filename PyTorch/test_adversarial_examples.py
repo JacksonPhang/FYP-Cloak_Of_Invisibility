@@ -61,6 +61,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
         image = Image.open(relative_directory + "\\IO_images\\input_test.jpg")
     else:
         image = Image.open(input_directory)
+    width, height = image.size
     image = data_transforms(image)
     if dataset == "cifar":
         image.unsqueeze_(0)
@@ -74,6 +75,8 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     perturbation = perturbation/perturb_level
     adv_img = perturbation + image
     adv_img = torch.clamp(adv_img, 0, 1)
+    adv_img = torch.nn.functional.interpolate(adv_img, size=(height, width))
+
     plt.axis('off')
     plt.imshow(np.transpose(adv_img[0].detach().numpy(), (1, 2, 0)))
     plt.savefig(output_directory, bbox_inches='tight')
