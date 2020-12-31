@@ -99,6 +99,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.gridLayout_2.addItem(spacerItem5, 1, 1, 1, 1)
 
         self.retranslateUi(Form)
+        # Link the slider and the spinbox value to ensure consistent and correct value
         self.perturbationSpinBox.valueChanged['int'].connect(self.horizontalSlider.setValue)
         self.horizontalSlider.valueChanged['int'].connect(self.perturbationSpinBox.setValue)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -137,6 +138,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         popup.setInformativeText("Click Ok to continue\nApplication will automatically switch to next page when image has been generated")
         popup.exec_()
 
+        # Backend functionality which will generate the perturbed image
         adversarial_attack(self.getCheckBox(), self.perturbationSpinBox.value(), self.file_path)
         self._parent.secondPageUI.setImage()
 
@@ -181,7 +183,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         Sets the file path of the chosen image file to
         the text edit as a display to the user
         """
-        self.imageUpload.setPixmap(QtGui.QPixmap(file_path).scaled(1580, 880, QtCore.Qt.KeepAspectRatio))
+        self.imageUpload.setPixmap(QtGui.QPixmap(file_path).scaled(1080, 480, QtCore.Qt.KeepAspectRatio))
         self.file_path = file_path
         _translate = QtCore.QCoreApplication.translate
         self.inputTextEdit.clear()
