@@ -70,6 +70,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.horizontalSlider = QtWidgets.QSlider(Form)
         self.horizontalSlider.setMinimum(1)
         self.horizontalSlider.setMaximum(100)
+        self.horizontalSlider.setValue(50)
         self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider.setObjectName("horizontalSlider")
         self.gridLayout.addWidget(self.horizontalSlider, 8, 0, 1, 4)
@@ -88,6 +89,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.perturbationSpinBox = QtWidgets.QSpinBox(Form)
         self.perturbationSpinBox.setMinimum(1)
         self.perturbationSpinBox.setMaximum(100)
+        self.perturbationSpinBox.setValue(50)
         self.perturbationSpinBox.setObjectName("perturbationSpinBox")
         self.gridLayout.addWidget(self.perturbationSpinBox, 6, 1, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 2, 1, 1)
@@ -169,7 +171,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         popup.setIcon(QtWidgets.QMessageBox.Information)
         popup.setStandardButtons(QtWidgets.QMessageBox.Ok)
         popup.setText("Computer Science Final Year Project\nCloak Of Invisibility")
-        popup.setInformativeText("Add In Information Here")
+        popup.setInformativeText("First select the file which you would like to perturb\nThen")
         popup.exec_()
 
     #####################################################################################################
