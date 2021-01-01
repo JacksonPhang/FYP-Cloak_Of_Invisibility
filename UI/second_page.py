@@ -123,4 +123,4 @@ class Ui_FormTwo(QtWidgets.QWidget):
 
         Used to set the image based on the file path
         """
-        self.imageOutput.setPixmap(QtGui.QPixmap(self.file_path).scaled(1580, 880, QtCore.Qt.KeepAspectRatio))
+        self.imageOutput.setPixmap(QtGui.QPixmap(self.file_path).scaled(1080, 480, QtCore.Qt.KeepAspectRatio))
