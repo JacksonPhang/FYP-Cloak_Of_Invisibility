@@ -18,15 +18,12 @@ MAX_SCALED_PERTURB_LEVEL = 2
 relative_directory = dirname(abspath(__file__))
 output_directory = relative_directory + "\\IO_images\\output_img.jpg"
 
-def adversarial_attack(dataset, perturb_level, input_directory = None):
-    # print(dataset)
-    # print(perturb_level)
-    # print(input_directory)
-    use_cuda=True
-    # Define what device we are using
-    print("CUDA Available: ", torch.cuda.is_available())
-    device = torch.device("cuda" if (use_cuda and torch.cuda.is_available()) else "cpu")
+use_cuda=True
+# Define what device we are using
+device = torch.device("cuda" if (use_cuda and torch.cuda.is_available()) else "cpu")
+saved_state = [None,None,None]
 
+def adversarial_attack(dataset, perturb_level, input_directory = None):
     if dataset == "cifar":
         image_nc = 3
         pretrained_model = relative_directory + "\\CIFAR100_target_model.pth"
@@ -48,7 +45,10 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
     # load the generator of adversarial examples
     pretrained_G = models.Generator(gen_input_nc, image_nc).to(device)
-    pretrained_G.load_state_dict(torch.load(pretrained_generator_path, map_location=torch.device('cpu')))
+    if torch.cuda.is_available():
+        pretrained_G.load_state_dict(torch.load(pretrained_generator_path))
+    else:
+        pretrained_G.load_state_dict(torch.load(pretrained_generator_path, map_location=torch.device('cpu')))
     pretrained_G.eval()
 
     data_transforms = transforms.Compose([
@@ -58,7 +58,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
     # load input image
     if not input_directory:
-        image = Image.open(relative_directory + "\\IO_images\\input_test.jpg")
+        image = Image.open(relative_directory + "\\IO_images\\mnist_input.jpg")
     else:
         image = Image.open(input_directory)
     width, height = image.size
@@ -74,73 +74,48 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     scaled_perturb_level = perturb_level * MAX_SCALED_PERTURB_LEVEL / MAX_PERTURB_LEVEL
     adv_img = (perturbation * scaled_perturb_level) + image
     adv_img = torch.clamp(adv_img, 0, 1)
-    adv_img = torch.nn.functional.interpolate(adv_img, size=(height, width))
+    saved_state[1] = adv_img
+    adv_img_def_size = torch.nn.functional.interpolate(adv_img, size=(height, width))
 
     plt.axis('off')
-    plt.imshow(np.transpose(adv_img[0].detach().numpy(), (1, 2, 0)))
+    plt.imshow(np.transpose(adv_img_def_size[0].detach().numpy(), (1, 2, 0)))
     plt.savefig(output_directory, bbox_inches='tight')
-    plt.show()
 
-    Input = Variable(image)
-    Input = Input.to(device)
-    output = target_model(Input)
-    index = output.data.cpu().numpy().argmax()
-    return (index)
+    saved_state[0] = image
+    saved_state[2] = target_model
 
-def test_accuracy(dataset, index, input_directory=None):
+def test_accuracy(dataset):
+    image = (Variable(saved_state[0])).to(device)
+    adv_img = (Variable(saved_state[1])).to(device)
+    target_model = saved_state[2]
+
+    loop = 30
+
+    input_label_list = []
+    adv_label_list = []
+    for i in range(loop):
+        output = target_model(image)
+        index = output.data.cpu().numpy().argmax()
+        input_label_list.append(index)
+
+        output = target_model(adv_img)
+        index = output.data.cpu().numpy().argmax()
+        adv_label_list.append(index)
+
+    input_label = max(input_label_list, key=input_label_list.count)
+    adv_label = max(adv_label_list, key=adv_label_list.count)
+
     if dataset == "cifar":
         target_dataset = torchvision.datasets.CIFAR100(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
         classes = target_dataset.classes
-        print(classes[index])
+        print("original prediction :", classes[input_label], "\nadversarial prediction :", classes[adv_label])
+        print("adversarial accuracy :", adv_label_list.count(input_label)/loop)
     else:
         target_dataset = torchvision.datasets.MNIST(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
         classes = target_dataset.classes
-        print(classes[index])
+        print("original prediction :", classes[input_label], "\nadversarial prediction :", classes[adv_label])
 
-    if input_directory is not None:
-        ori_image = Image.open(input_directory)
-    else:
-        ori_image = Image.open(relative_directory + "\\IO_images\\input_img.jpg")
-    pert_image = Image.open(output_directory)
-
-
-    
-    
-    # # test adversarial examples in MNIST training dataset
-    # mnist_dataset = torchvision.datasets.MNIST('./dataset', train=True, transform=transforms.ToTensor(), download=True)
-    # train_dataloader = DataLoader(mnist_dataset, batch_size=batch_size, shuffle=False, num_workers=1)
-    # num_correct = 0
-    # for i, data in enumerate(train_dataloader, 0):
-    #     test_img, test_label = data
-    #     test_img, test_label = test_img.to(device), test_label.to(device)
-    #     perturbation = pretrained_G(test_img)
-    #     perturbation = torch.clamp(perturbation, -0.3, 0.3)
-    #     adv_img = perturbation + test_img
-    #     adv_img = torch.clamp(adv_img, 0, 1)
-    #     pred_lab = torch.argmax(target_model(adv_img),1)
-    #     num_correct += torch.sum(pred_lab==test_label,0)
-    #
-    # print('MNIST training dataset:')
-    # print('num_correct: ', num_correct.item())
-    # print('accuracy of adv imgs in training set: %f\n'%(num_correct.item()/len(mnist_dataset)))
-    #
-    # # test adversarial examples in MNIST testing dataset
-    # mnist_dataset_test = torchvision.datasets.MNIST('./dataset', train=False, transform=transforms.ToTensor(), download=True)
-    # test_dataloader = DataLoader(mnist_dataset_test, batch_size=batch_size, shuffle=False, num_workers=1)
-    # num_correct = 0
-    # for i, data in enumerate(test_dataloader, 0):
-    #     test_img, test_label = data
-    #     test_img, test_label = test_img.to(device), test_label.to(device)
-    #     perturbation = pretrained_G(test_img)
-    #     perturbation = torch.clamp(perturbation, -0.3, 0.3)
-    #     adv_img = perturbation + test_img
-    #     adv_img = torch.clamp(adv_img, 0, 1)
-    #     pred_lab = torch.argmax(target_model(adv_img),1)
-    #     num_correct += torch.sum(pred_lab==test_label,0)
-    #
-    # print('num_correct: ', num_correct.item())
-    # print('accuracy of adv imgs in testing set: %f\n'%(num_correct.item()/len(mnist_dataset_test)))
 
 if __name__ == "__main__":
-    ans = adversarial_attack('cifar', 50)
+    ans = adversarial_attack('cifar',20)
     test_accuracy('cifar', ans)
