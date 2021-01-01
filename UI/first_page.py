@@ -37,11 +37,11 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.gridLayout.addItem(spacerItem, 3, 0, 1, 2)
         spacerItem1 = QtWidgets.QSpacerItem(29, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem1, 14, 0, 1, 1)
-        self.cifarCheckBox = QtWidgets.QCheckBox(Form)
+        self.cifarCheckBox = QtWidgets.QRadioButton(Form)
         self.cifarCheckBox.setChecked(True)
         self.cifarCheckBox.setObjectName("cifarCheckBox")
         self.gridLayout.addWidget(self.cifarCheckBox, 4, 0, 1, 1)
-        self.mnistCheckBox = QtWidgets.QCheckBox(Form)
+        self.mnistCheckBox = QtWidgets.QRadioButton(Form)
         self.mnistCheckBox.setObjectName("mnistCheckBox")
         self.gridLayout.addWidget(self.mnistCheckBox, 5, 0, 1, 1)
         self.buttonGroup = QtWidgets.QButtonGroup()
@@ -171,7 +171,12 @@ class Ui_FormOne(QtWidgets.QWidget):
         popup.setIcon(QtWidgets.QMessageBox.Information)
         popup.setStandardButtons(QtWidgets.QMessageBox.Ok)
         popup.setText("Computer Science Final Year Project\nCloak Of Invisibility")
-        popup.setInformativeText("First select the file which you would like to perturb\nThen")
+        text1 = "First select the file which you would like to perturb\nThen choose which dataset to use for the perturbation\n"
+        text2 = "Use the slider to set how much perturbation you want\nFinally click the Generate button to start perturbating the image\n\n"
+        text3 = "CIFAR is used for general images\nMNIST is used for number images\nThe slider value of 1 for the least perturbed and 100 for the most perturbed\n\n"
+        text4 = "Created images may appear pixelated due to the perturbation algorithm only accepts a limited amount of pixels"
+        texts = text1 + text2 + text3 + text4
+        popup.setInformativeText(texts)
         popup.exec_()
 
     #####################################################################################################
