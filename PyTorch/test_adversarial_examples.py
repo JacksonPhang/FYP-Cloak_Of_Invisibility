@@ -48,7 +48,10 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
     # load the generator of adversarial examples
     pretrained_G = models.Generator(gen_input_nc, image_nc).to(device)
-    pretrained_G.load_state_dict(torch.load(pretrained_generator_path, map_location=torch.device('cpu')))
+    if torch.cuda.is_available():
+        pretrained_G.load_state_dict(torch.load(pretrained_generator_path))
+    else:
+        pretrained_G.load_state_dict(torch.load(pretrained_generator_path, map_location=torch.device('cpu')))
     pretrained_G.eval()
 
     data_transforms = transforms.Compose([
@@ -79,13 +82,12 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     plt.savefig(output_directory, bbox_inches='tight')
     plt.show()
 
+def test_accuracy(dataset, index, input_directory=None):
     Input = Variable(image)
     Input = Input.to(device)
     output = target_model(Input)
     index = output.data.cpu().numpy().argmax()
     return (index)
-
-def test_accuracy(dataset, index, input_directory=None):
     if dataset == "cifar":
         target_dataset = torchvision.datasets.CIFAR100(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
         classes = target_dataset.classes
