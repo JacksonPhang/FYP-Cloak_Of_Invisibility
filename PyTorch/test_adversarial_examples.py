@@ -19,9 +19,11 @@ relative_directory = dirname(abspath(__file__))
 output_directory = relative_directory + "\\IO_images\\output_img.jpg"
 
 use_cuda=True
+loop = 30
 # Define what device we are using
 device = torch.device("cuda" if (use_cuda and torch.cuda.is_available()) else "cpu")
-saved_state = [None,None,None]
+saved_state = [None,None,None] #saved state of input image, adv image and target model
+output_state = [None,None,None] #saved state of input prediction label, output prediction label and output label list
 
 def adversarial_attack(dataset, perturb_level, input_directory = None):
     if dataset == "cifar":
@@ -58,7 +60,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
     # load input image
     if not input_directory:
-        image = Image.open(relative_directory + "\\IO_images\\mnist_input.jpg")
+        image = Image.open(relative_directory + "\\IO_images\\input_bowl.jpg")
     else:
         image = Image.open(input_directory)
     width, height = image.size
@@ -84,15 +86,13 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     saved_state[0] = image
     saved_state[2] = target_model
 
-def test_accuracy(dataset):
+def test_accuracy():
     image = (Variable(saved_state[0])).to(device)
     adv_img = (Variable(saved_state[1])).to(device)
     target_model = saved_state[2]
 
-    loop = 30
-
-    input_label_list = []
-    adv_label_list = []
+    input_label_list = [] #list to store all prediction labels of input image
+    adv_label_list = [] #list to store adversarial output prediction
     for i in range(loop):
         output = target_model(image)
         index = output.data.cpu().numpy().argmax()
@@ -102,20 +102,30 @@ def test_accuracy(dataset):
         index = output.data.cpu().numpy().argmax()
         adv_label_list.append(index)
 
-    input_label = max(input_label_list, key=input_label_list.count)
-    adv_label = max(adv_label_list, key=adv_label_list.count)
+    print(input_label_list)
+    print(adv_label_list)
+
+    output_state[0] = max(input_label_list, key=input_label_list.count)
+    output_state[1] = max(adv_label_list, key=adv_label_list.count)
+    output_state[2] = adv_label_list
+     
+def get_label_accuracy(dataset):
+    input_label = output_state[0]
+    adv_label = output_state[1]
+    adv_label_list = output_state[2]
 
     if dataset == "cifar":
         target_dataset = torchvision.datasets.CIFAR100(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
-        classes = target_dataset.classes
-        print("original prediction :", classes[input_label], "\nadversarial prediction :", classes[adv_label])
-        print("adversarial accuracy :", adv_label_list.count(input_label)/loop)
     else:
         target_dataset = torchvision.datasets.MNIST(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
-        classes = target_dataset.classes
-        print("original prediction :", classes[input_label], "\nadversarial prediction :", classes[adv_label])
+    
+    classes = target_dataset.classes
+    # print("original prediction :", classes[input_label], "\nadversarial prediction :", classes[adv_label])
+    # print("adversarial accuracy :", (adv_label_list.count(input_label)/loop)*100)
+    return classes[input_label], classes[adv_label],  (adv_label_list.count(input_label)/loop)*100
 
 
 if __name__ == "__main__":
-    ans = adversarial_attack('cifar',20)
-    test_accuracy('cifar', ans)
+    ans = adversarial_attack('cifar',12)
+    test_accuracy()
+    get_label_accuracy('cifar')
