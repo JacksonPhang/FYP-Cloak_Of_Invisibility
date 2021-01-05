@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from os.path import dirname, abspath
 from accepted_file_input import getAcceptInput
+from PyTorch.test_adversarial_examples import test_accuracy
 import getpass
 
 class Ui_FormTwo(QtWidgets.QWidget):
@@ -93,13 +94,18 @@ class Ui_FormTwo(QtWidgets.QWidget):
         Compare Image Button Functionality
 
         Compare the input inmage with the output image
-        """ 
+        """
+        output_data = test_accuracy()
         popup = QtWidgets.QMessageBox()
         popup.setWindowTitle("Application Information")
         popup.setWindowModality(QtCore.Qt.ApplicationModal)
         popup.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        text1 = "Input Prediction Label:  " + str(output_data[0]) + "\n"
+        text2 = "Output Prediction Label: " + str(output_data[1]) + "\n"
+        text3 = "Output Label List:       " + str(output_data[2])
+        texts = text1 + text2 + text3
         popup.setText("Computer Science Final Year Project\nCloak Of Invisibility")
-        popup.setIconPixmap(QtGui.QPixmap("").scaled(1080, 480, QtCore.Qt.KeepAspectRatio))
+        popup.setInformativeText(texts)
         popup.exec_()
 
     def saveButtonFunction(self):

@@ -102,12 +102,14 @@ def test_accuracy():
         index = output.data.cpu().numpy().argmax()
         adv_label_list.append(index)
 
-    print(input_label_list)
-    print(adv_label_list)
+    # print(input_label_list)
+    # print(adv_label_list)
 
     output_state[0] = max(input_label_list, key=input_label_list.count)
     output_state[1] = max(adv_label_list, key=adv_label_list.count)
     output_state[2] = adv_label_list
+
+    return output_state
      
 def get_label_accuracy(dataset):
     input_label = output_state[0]

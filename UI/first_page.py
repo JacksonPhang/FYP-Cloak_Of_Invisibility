@@ -4,12 +4,12 @@ from first_page_modules.my_qlabel import MyQLabel
 from first_page_modules.my_qplaintextedit import MyQPlainTextEdit
 from accepted_file_input import getAcceptInput
 from PyTorch.test_adversarial_examples import adversarial_attack
-              
+
 class Ui_FormOne(QtWidgets.QWidget):
     """
     The first page of the User Interface
     Do not edit unless you know what's up
-    """  
+    """
 
     def __init__(self, parent):
         """
@@ -174,7 +174,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         text1 = "First select the file which you would like to perturb\nThen choose which dataset to use for the perturbation\n"
         text2 = "Use the slider to set how much perturbation you want\nFinally click the Generate button to start perturbating the image\n\n"
         text3 = "CIFAR is used for general images\nMNIST is used for number images\nThe slider value of 1 for the least perturbed and 100 for the most perturbed\n\n"
-        text4 = "Created images may appear pixelated due to the perturbation algorithm only accepts a limited amount of pixels"
+        text4 = "Created images may appear pixelated due to the perturbation algorithm only accepting a limited amount of pixels"
         texts = text1 + text2 + text3 + text4
         popup.setInformativeText(texts)
         popup.exec_()
