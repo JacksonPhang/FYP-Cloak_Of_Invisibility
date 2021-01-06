@@ -134,7 +134,7 @@ def test_accuracy():
 
     return output_state
      
-def get_label_accuracy(dataset):
+def get_label_accuracy(dataset, output_state):
     """
     Get the labels of the images and the accuracy percentage of the labels
     :param dataset: string stating the name of dataset used

@@ -31,7 +31,7 @@ class main_ui(QtWidgets.QWidget):
         ##############################################
         mainLayout = QtWidgets.QVBoxLayout()
         self.firstPageUI = Ui_FormOne(self)
-        self.secondPageUI = Ui_FormTwo(self)
+        self.secondPageUI = Ui_FormTwo(self, self.firstPageUI.getCheckBox())
 
         self.stackWidget = QtWidgets.QStackedWidget()
         self.stackWidget.addWidget(self.firstPageUI) # Index 0

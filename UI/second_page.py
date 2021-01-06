@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from os.path import dirname, abspath
 from accepted_file_input import getAcceptInput
 from PyTorch.test_adversarial_examples import test_accuracy
+from PyTorch.test_adversarial_examples import get_label_accuracy
 import getpass
 
 class Ui_FormTwo(QtWidgets.QWidget):
@@ -10,7 +11,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
     Do not edit unless you know what's up
     """
 
-    def __init__(self, parent):
+    def __init__(self, parent, dataset):
         """
         Initialise Object
 
@@ -19,6 +20,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
         super().__init__()
         self._parent = parent
         self.file_path = dirname(dirname(abspath(__file__))) + "\\PyTorch\\IO_images\\output_img.jpg"
+        self.dataset = dataset
 
         Form = QtWidgets.QWidget()
         Form.setObjectName("Form")
@@ -95,14 +97,15 @@ class Ui_FormTwo(QtWidgets.QWidget):
 
         Compare the input inmage with the output image
         """
-        output_data = test_accuracy()
+        output_state = test_accuracy()
+        output_data = get_label_accuracy(self.dataset, output_state)
         popup = QtWidgets.QMessageBox()
         popup.setWindowTitle("Application Information")
         popup.setWindowModality(QtCore.Qt.ApplicationModal)
         popup.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        text1 = "Input Prediction Label:  " + str(output_data[0]) + "\n"
+        text1 = "Input Prediction Label : " + str(output_data[0]) + "\n"
         text2 = "Output Prediction Label: " + str(output_data[1]) + "\n"
-        text3 = "Output Label List:       " + str(output_data[2])
+        text3 = "Output accuracy        : " + str(output_data[2]) + "%"
         texts = text1 + text2 + text3
         popup.setText("Computer Science Final Year Project\nCloak Of Invisibility")
         popup.setInformativeText(texts)
