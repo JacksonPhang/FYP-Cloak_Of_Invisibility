@@ -1,3 +1,7 @@
+"""
+Primary function for adding perturbation onto input image and obtaining prediction label
+"""
+
 import torch
 from os.path import dirname, abspath
 import torchvision.datasets
@@ -27,10 +31,12 @@ output_state = [None,None,None] #saved state of input prediction label, output p
 
 def adversarial_attack(dataset, perturb_level, input_directory = None):
     """
-    Conduct the adversarial attack
-    :param dataset: string stating the name of dataset used
-    :param perturb_level: integer from 1 to 100 signifying perturbation intensity level
-    :param input_directory: file path for alternate input image location
+    Conducts the adversarial attack on input image
+
+    Args:
+        dataset ([String]): name of dataset selected by the user
+        perturb_level ([int]): Integer level from 1 to 100 signifying perturbation intensity level
+        input_directory ([String], optional): file path for input image location. Defaults to None.
     """
     if dataset == "cifar":
         image_nc = 3
@@ -107,8 +113,10 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
 def test_accuracy():
     """
-    runs prediction and predicts labels for input image and adversarial image
-    :return: array that holds the predicted labels for input and adversarial image
+    Runs prediction and predicts labels for the input image and adversarial image
+
+    Returns:
+        [list]: List containing input label index, output label index and output label list
     """
     image = (Variable(saved_state[0])).to(device)
     adv_img = (Variable(saved_state[1])).to(device)
@@ -125,9 +133,6 @@ def test_accuracy():
         index = output.data.cpu().numpy().argmax()
         adv_label_list.append(index)
 
-    # print(input_label_list)
-    # print(adv_label_list)
-
     # get most common prediction for input label
     output_state[0] = max(input_label_list, key=input_label_list.count)
     # get most common prediction for adversarial label
@@ -138,9 +143,14 @@ def test_accuracy():
      
 def get_label_accuracy(dataset, output_state):
     """
-    Get the labels of the images and the accuracy percentage of the labels
-    :param dataset: string stating the name of dataset used
-    :return: label of original image, label of adversarial example, accuracy percentage
+    Get the labels of the images and the accuracy percentage of the adversarial label prediction
+
+    Args:
+        dataset ([String]): dataset selected by user
+        output_state ([list]): list containing input label index, output label index and output label list
+
+    Returns:
+        [list]: list containing input label, output label and output label accuracy
     """
     input_label = output_state[0]
     adv_label = output_state[1]
@@ -153,10 +163,7 @@ def get_label_accuracy(dataset, output_state):
         target_dataset = torchvision.datasets.MNIST(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
     
     classes = target_dataset.classes
-    # print("original prediction :", classes[input_label], "\nadversarial prediction :", classes[adv_label])
-    # print("adversarial accuracy :", (adv_label_list.count(input_label)/loop)*100)
     return classes[input_label], classes[adv_label],  (adv_label_list.count(input_label)/loop)*100
-
 
 if __name__ == "__main__":
     ans = adversarial_attack('cifar',12)

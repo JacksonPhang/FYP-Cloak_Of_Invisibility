@@ -2,6 +2,7 @@
 Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun.
 Deep Residual Learning for Image Recognition.
 In CVPR, 2016.
+Model definition for pretrained CIFAR classifier. Obtained from https://github.com/chenyaofo/CIFAR-pretrained-models
 '''
 
 import torch.nn as nn

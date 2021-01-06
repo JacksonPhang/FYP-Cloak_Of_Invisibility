@@ -1,3 +1,7 @@
+"""
+Script to train advgan model for generating perturbation. Obtained from https://github.com/mathcbc/advGAN_pytorch
+"""
+
 import torch.nn as nn
 import torch
 import numpy as np

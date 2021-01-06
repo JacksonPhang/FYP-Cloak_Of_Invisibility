@@ -1,3 +1,7 @@
+"""
+Model definition for mnist classifier. Obtained from https://github.com/mathcbc/advGAN_pytorch
+"""
+
 import torch.nn as nn
 import torch.nn.functional as F
 

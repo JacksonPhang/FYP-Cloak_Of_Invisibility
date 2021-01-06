@@ -1,3 +1,7 @@
+"""
+Script used to train advgan model. To train for mnist, change image_nc, pretrained_model and dataset used
+"""
+
 import torch
 import torchvision.datasets
 import torchvision.transforms as transforms
@@ -9,7 +13,7 @@ from resnet import BasicBlock
 
 if __name__ == "__main__":
     use_cuda=True
-    image_nc=3
+    image_nc=3 #3 channels for cifar dataset, 1 channel for mnist dataset
     epochs = 60
     batch_size = 5
     BOX_MIN = 0
@@ -25,7 +29,7 @@ if __name__ == "__main__":
     targeted_model.eval()
     model_num_labels = 100
 
-    # MNIST train dataset and dataloader declaration
+    # cifar train dataset and dataloader declaration
     cifar_dataset = torchvision.datasets.CIFAR100('./dataset', train=True, transform=transforms.ToTensor(), download=True)
     dataloader = DataLoader(cifar_dataset, batch_size=batch_size, shuffle=True, num_workers=1)
     advGAN = AdvGAN_Attack(device,
@@ -35,6 +39,4 @@ if __name__ == "__main__":
                             BOX_MIN,
                             BOX_MAX)
 
-    print("enter1")
     advGAN.train(dataloader, epochs)
-    print("EXIT")

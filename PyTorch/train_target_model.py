@@ -1,3 +1,7 @@
+"""
+Script to train mnist classifier. Obtained from https://github.com/mathcbc/advGAN_pytorch
+"""
+
 import torch
 import torchvision.datasets
 import torchvision.transforms as transforms
