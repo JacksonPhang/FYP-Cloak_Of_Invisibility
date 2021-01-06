@@ -107,8 +107,8 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
 def test_accuracy():
     """
-    get the labels of the images and put them in global array output_state
-    :return: global array that holds the label indexes for its corresponding image
+    runs prediction and predicts labels for input image and adversarial image
+    :return: array that holds the predicted labels for input and adversarial image
     """
     image = (Variable(saved_state[0])).to(device)
     adv_img = (Variable(saved_state[1])).to(device)
@@ -128,7 +128,9 @@ def test_accuracy():
     # print(input_label_list)
     # print(adv_label_list)
 
+    # get most common prediction for input label
     output_state[0] = max(input_label_list, key=input_label_list.count)
+    # get most common prediction for adversarial label
     output_state[1] = max(adv_label_list, key=adv_label_list.count)
     output_state[2] = adv_label_list
 
