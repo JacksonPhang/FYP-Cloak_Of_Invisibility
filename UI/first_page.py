@@ -176,7 +176,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         text3 = "CIFAR is used for general images\nMNIST is used for number images\nThe slider value of 1 for the least perturbed and 100 for the most perturbed\n\n"
         text4 = "Created images may appear pixelated due to the perturbation algorithm only accepting a limited amount of pixels\n"
         text5 = "The MNIST model requires a 28 x 28 image, while the CIFAR100 dataset requires a 32 x 32 image"
-        texts = text1 + text2 + text3 + text4
+        texts = text1 + text2 + text3 + text4 + text5
         popup.setInformativeText(texts)
         popup.exec_()
 
