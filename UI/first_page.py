@@ -174,7 +174,8 @@ class Ui_FormOne(QtWidgets.QWidget):
         text1 = "First select the file which you would like to perturb\nThen choose which dataset to use for the perturbation\n"
         text2 = "Use the slider to set how much perturbation you want\nFinally click the Generate button to start perturbating the image\n\n"
         text3 = "CIFAR is used for general images\nMNIST is used for number images\nThe slider value of 1 for the least perturbed and 100 for the most perturbed\n\n"
-        text4 = "Created images may appear pixelated due to the perturbation algorithm only accepting a limited amount of pixels"
+        text4 = "Created images may appear pixelated due to the perturbation algorithm only accepting a limited amount of pixels\n"
+        text5 = "The MNIST model requires a 28 x 28 image, while the CIFAR100 dataset requires a 32 x 32 image"
         texts = text1 + text2 + text3 + text4
         popup.setInformativeText(texts)
         popup.exec_()
