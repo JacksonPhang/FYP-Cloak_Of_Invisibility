@@ -198,6 +198,8 @@ class Ui_FormOne(QtWidgets.QWidget):
 
     def isImageFile(self, file):
         """
+        Helper Function
+
         Checks whether the file path provided 
         references an accepted image file
         """
