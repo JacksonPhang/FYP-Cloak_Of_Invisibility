@@ -23,11 +23,11 @@ relative_directory = dirname(abspath(__file__))
 output_directory = relative_directory + "\\IO_images\\output_img.jpg"
 
 use_cuda=True
-loop = 30
 # Define what device we are using
 device = torch.device("cuda" if (use_cuda and torch.cuda.is_available()) else "cpu")
-saved_state = [None,None,None] #saved state of input image, adv image and target model
+saved_state = [None,None,None, None] #saved state of input image, adv image, target model and adv image in original dimensions
 output_state = [None,None,None] #saved state of input prediction label, output prediction label and output label list
+original_image_state = [None, None] #original height and width
 
 def adversarial_attack(dataset, perturb_level, input_directory = None):
     """
@@ -74,12 +74,12 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
     # load input image
     if not input_directory:
-        image = Image.open(relative_directory + "\\IO_images\\input_test.jpg")
+        image = Image.open(relative_directory + "\\IO_images\\input_test3.jpg")
     else:
         image = Image.open(input_directory)
 
     # retain original image dimensions
-    width, height = image.size
+    original_image_state[0], original_image_state[1] = image.size
     image = data_transforms(image)
 
     # modify the input to the dataset models to match the input dimensions and weights
@@ -100,11 +100,11 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     adv_img = torch.clamp(adv_img, 0, 1)
     saved_state[1] = adv_img
     # resize the image back to the original image dimensions
-    adv_img_def_size = torch.nn.functional.interpolate(adv_img, size=(height, width))
+    saved_state[3] = torch.nn.functional.interpolate(adv_img, size=(original_image_state[1], original_image_state[0]))
 
     plt.axis('off')
     # convert tensor image into a matplotlib image figure
-    plt.imshow(np.transpose(adv_img_def_size[0].detach().numpy(), (1, 2, 0)))
+    plt.imshow(np.transpose(saved_state[3][0].detach().numpy(), (1, 2, 0)))
     # save the image in the output directory
     plt.savefig(output_directory, bbox_inches='tight')
 
@@ -124,14 +124,14 @@ def test_accuracy():
 
     input_label_list = [] #list to store all prediction labels of input image
     adv_label_list = [] #list to store adversarial output prediction
-    for i in range(loop):
-        output = target_model(image)
-        index = output.data.cpu().numpy().argmax()
-        input_label_list.append(index)
 
-        output = target_model(adv_img)
-        index = output.data.cpu().numpy().argmax()
-        adv_label_list.append(index)
+    output = target_model(image)
+    index = output.data.cpu().numpy().argmax()
+    input_label_list.append(index)
+
+    output = target_model(adv_img)
+    index = output.data.cpu().numpy().argmax()
+    adv_label_list.append(index)
 
     # get most common prediction for input label
     output_state[0] = max(input_label_list, key=input_label_list.count)
@@ -163,9 +163,26 @@ def get_label_accuracy(dataset, output_state):
         target_dataset = torchvision.datasets.MNIST(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
     
     classes = target_dataset.classes
-    return classes[input_label], classes[adv_label],  (adv_label_list.count(input_label)/loop)*100
+    return classes[input_label], classes[adv_label]
+
+def compare_display():
+    """
+    Function displays both input image and output image side by side
+    """
+    adv_image = saved_state[3]
+    image = saved_state[0]
+    image = torch.nn.functional.interpolate(image, size=(original_image_state[1], original_image_state[0]))
+
+    plt.subplot(1,2,1)
+    plt.title("Resized input")
+    plt.imshow(np.transpose(image[0].detach().numpy(), (1, 2, 0)))
+    plt.subplot(1,2,2)
+    plt.title("Adversarial output")
+    plt.imshow(np.transpose(adv_image[0].detach().numpy(), (1, 2, 0)))
+    plt.show()
 
 if __name__ == "__main__":
-    ans = adversarial_attack('cifar',12)
+    ans = adversarial_attack('cifar',5)
     test_accuracy()
-    get_label_accuracy('cifar')
+    get_label_accuracy('cifar', output_state)
+    compare_display()
