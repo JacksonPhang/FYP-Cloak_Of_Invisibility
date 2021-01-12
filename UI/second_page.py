@@ -12,7 +12,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
     Do not edit unless you know what's up
     """
 
-    def __init__(self, parent, dataset):
+    def __init__(self, parent):
         """
         Initialise Object
 
@@ -21,7 +21,6 @@ class Ui_FormTwo(QtWidgets.QWidget):
         super().__init__()
         self._parent = parent
         self.file_path = dirname(dirname(abspath(__file__))) + "\\PyTorch\\IO_images\\output_img.jpg"
-        self.dataset = dataset
 
         Form = QtWidgets.QWidget()
         Form.setObjectName("Form")
@@ -99,7 +98,8 @@ class Ui_FormTwo(QtWidgets.QWidget):
         Compare the input inmage with the output image
         """
         output_state = test_accuracy()
-        output_data = get_label_accuracy(self.dataset, output_state)
+        dataset = self._parent.firstPageUI.getCheckBox()
+        output_data = get_label_accuracy(dataset, output_state)
         compare_display(output_data)
 
     def saveButtonFunction(self):

@@ -29,6 +29,9 @@ saved_state = [None,None,None, None] #saved state of input image, adv image, tar
 output_state = [None,None,None] #saved state of input prediction label, output prediction label and output label list
 original_image_state = [None, None] #original height and width
 
+cifar_dataset = torchvision.datasets.CIFAR100(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
+mnist_dataset = torchvision.datasets.MNIST(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
+
 def adversarial_attack(dataset, perturb_level, input_directory = None):
     """
     Conducts the adversarial attack on input image
@@ -43,12 +46,14 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
         pretrained_model = relative_directory + "\\CIFAR100_target_model.pth"
         pretrained_generator_path = relative_directory + "\\models\\cifar_epoch_60.pth"
         target_model = CifarResNet(BasicBlock, [9, 9, 9]).to(device)
+        default_image = "input_test.jpg"
         size = 32
     else:
         image_nc = 1
         pretrained_model = relative_directory + "\\MNIST_target_model.pth"
         pretrained_generator_path = relative_directory + "\\models\\netG_epoch_60.pth"
         target_model = MNIST_target_net().to(device)
+        default_image = "mnist_test.jpg"
         size = 28
     batch_size = 128
     gen_input_nc = image_nc
@@ -74,7 +79,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
     # load input image
     if not input_directory:
-        image = Image.open(relative_directory + "\\IO_images\\input_test.jpg")
+        image = Image.open(relative_directory + "\\IO_images\\"+default_image)
     else:
         image = Image.open(input_directory)
 
@@ -158,9 +163,9 @@ def get_label_accuracy(dataset, output_state):
 
     # load target dataset
     if dataset == "cifar":
-        target_dataset = torchvision.datasets.CIFAR100(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
+        target_dataset = cifar_dataset
     else:
-        target_dataset = torchvision.datasets.MNIST(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
+        target_dataset = mnist_dataset
     
     classes = target_dataset.classes
     return classes[input_label], classes[adv_label]
