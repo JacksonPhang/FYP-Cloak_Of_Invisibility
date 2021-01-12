@@ -74,7 +74,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
 
     # load input image
     if not input_directory:
-        image = Image.open(relative_directory + "\\IO_images\\input_test3.jpg")
+        image = Image.open(relative_directory + "\\IO_images\\input_test.jpg")
     else:
         image = Image.open(input_directory)
 
