@@ -100,17 +100,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
         """
         output_state = test_accuracy()
         output_data = get_label_accuracy(self.dataset, output_state)
-        compare_display()
-        popup = QtWidgets.QMessageBox()
-        popup.setWindowTitle("Application Information")
-        popup.setWindowModality(QtCore.Qt.ApplicationModal)
-        popup.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        text1 = "Input Prediction Label   : " + str(output_data[0]) + "\n"
-        text2 = "Output Prediction Label  : " + str(output_data[1]) + "\n"
-        texts = text1 + text2
-        popup.setText("Computer Science Final Year Project\nCloak Of Invisibility")
-        popup.setInformativeText(texts)
-        popup.exec_()
+        compare_display(output_data)
 
     def saveButtonFunction(self):
         """

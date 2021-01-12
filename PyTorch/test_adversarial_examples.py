@@ -165,7 +165,7 @@ def get_label_accuracy(dataset, output_state):
     classes = target_dataset.classes
     return classes[input_label], classes[adv_label]
 
-def compare_display():
+def compare_display(output_data):
     """
     Function displays both input image and output image side by side
     """
@@ -173,16 +173,18 @@ def compare_display():
     image = saved_state[0]
     image = torch.nn.functional.interpolate(image, size=(original_image_state[1], original_image_state[0]))
 
-    plt.subplot(1,2,1)
+    ax1 = plt.subplot(1,2,1)
     plt.title("Resized input")
     plt.imshow(np.transpose(image[0].detach().numpy(), (1, 2, 0)))
-    plt.subplot(1,2,2)
+    ax1.set_xlabel("Input prediction label : " + str(output_data[0]))
+    ax2 = plt.subplot(1,2,2)
     plt.title("Adversarial output")
     plt.imshow(np.transpose(adv_image[0].detach().numpy(), (1, 2, 0)))
+    ax2.set_xlabel("Output prediction label : " + str(output_data[1]))
     plt.show()
 
 if __name__ == "__main__":
     ans = adversarial_attack('cifar',5)
     test_accuracy()
-    get_label_accuracy('cifar', output_state)
-    compare_display()
+    output = get_label_accuracy('cifar', output_state)
+    compare_display(output)
