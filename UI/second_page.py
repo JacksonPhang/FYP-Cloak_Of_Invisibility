@@ -104,9 +104,8 @@ class Ui_FormTwo(QtWidgets.QWidget):
         popup.setWindowModality(QtCore.Qt.ApplicationModal)
         popup.setStandardButtons(QtWidgets.QMessageBox.Ok)
         text1 = "Input Prediction Label   : " + str(output_data[0]) + "\n"
-        text2 = "Output Prediction Label: " + str(output_data[1]) + "\n"
-        text3 = "Output accuracy            : " + str(output_data[2]) + "%"
-        texts = text1 + text2 + text3
+        text2 = "Output Prediction Label  : " + str(output_data[1]) + "\n"
+        texts = text1 + text2
         popup.setText("Computer Science Final Year Project\nCloak Of Invisibility")
         popup.setInformativeText(texts)
         popup.exec_()
