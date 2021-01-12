@@ -3,6 +3,7 @@ from os.path import dirname, abspath
 from accepted_file_input import getAcceptInput
 from PyTorch.test_adversarial_examples import test_accuracy
 from PyTorch.test_adversarial_examples import get_label_accuracy
+from PyTorch.test_adversarial_examples import compare_display
 import getpass
 
 class Ui_FormTwo(QtWidgets.QWidget):
@@ -99,6 +100,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
         """
         output_state = test_accuracy()
         output_data = get_label_accuracy(self.dataset, output_state)
+        compare_display()
         popup = QtWidgets.QMessageBox()
         popup.setWindowTitle("Application Information")
         popup.setWindowModality(QtCore.Qt.ApplicationModal)
