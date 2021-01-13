@@ -186,7 +186,7 @@ def compare_display(output_data):
     plt.title("Adversarial output")
     plt.imshow(np.transpose(adv_image[0].detach().numpy(), (1, 2, 0)))
     ax2.set_xlabel("Output prediction label : " + str(output_data[1]))
-    plt.show()
+    return plt
 
 if __name__ == "__main__":
     ans = adversarial_attack('cifar',5)

@@ -21,6 +21,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
         super().__init__()
         self._parent = parent
         self.file_path = dirname(dirname(abspath(__file__))) + "\\PyTorch\\IO_images\\output_img.jpg"
+        self.display = None
 
         Form = QtWidgets.QWidget()
         Form.setObjectName("Form")
@@ -89,6 +90,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
         Changes the selection of the application to the first page
         """ 
         # Change to first page
+        self.display.close()
         self._parent.stackWidget.setCurrentIndex(0)
 
     def compareButtonFunction(self):
@@ -100,7 +102,8 @@ class Ui_FormTwo(QtWidgets.QWidget):
         output_state = test_accuracy()
         dataset = self._parent.firstPageUI.getCheckBox()
         output_data = get_label_accuracy(dataset, output_state)
-        compare_display(output_data)
+        self.display = compare_display(output_data)
+        self.display.show()
 
     def saveButtonFunction(self):
         """
