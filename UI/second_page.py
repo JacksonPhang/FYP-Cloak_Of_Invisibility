@@ -90,7 +90,8 @@ class Ui_FormTwo(QtWidgets.QWidget):
         Changes the selection of the application to the first page
         """ 
         # Change to first page
-        self.display.close()
+        if self.display is not None:
+            self.display.close()
         self._parent.stackWidget.setCurrentIndex(0)
 
     def compareButtonFunction(self):
