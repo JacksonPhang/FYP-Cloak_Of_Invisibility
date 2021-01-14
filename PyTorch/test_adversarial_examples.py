@@ -46,7 +46,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
         pretrained_model = relative_directory + "\\CIFAR100_target_model.pth"
         pretrained_generator_path = relative_directory + "\\models\\cifar_epoch_60.pth"
         target_model = CifarResNet(BasicBlock, [9, 9, 9]).to(device)
-        default_image = "input_test.jpg"
+        default_image = "input_test2.jpg"
         size = 32
     else:
         image_nc = 1
@@ -189,7 +189,14 @@ def compare_display(output_data):
     return plt
 
 if __name__ == "__main__":
-    ans = adversarial_attack('cifar',5)
-    test_accuracy()
-    output = get_label_accuracy('cifar', output_state)
-    compare_display(output)
+    # ans = adversarial_attack('cifar',5)
+    # test_accuracy()
+    # output = get_label_accuracy('cifar', output_state)
+    # compare_display(output)
+
+    for i in range(1,101):
+        ans = adversarial_attack('cifar', i)
+        ans = test_accuracy()
+        if ans[0] != ans[1] :
+            print("level :", i)
+            break
