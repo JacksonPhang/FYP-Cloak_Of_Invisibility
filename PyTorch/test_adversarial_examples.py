@@ -26,7 +26,7 @@ use_cuda=True
 # Define what device we are using
 device = torch.device("cuda" if (use_cuda and torch.cuda.is_available()) else "cpu")
 saved_state = [None,None,None, None] #saved state of input image, adv image, target model and adv image in original dimensions
-output_state = [None,None,None] #saved state of input prediction label, output prediction label and output label list
+output_state = [None,None] #saved state of input prediction label and output prediction label
 original_image_state = [None, None] #original height and width
 
 cifar_dataset = torchvision.datasets.CIFAR100(relative_directory + "\\dataset", train=True, transform=transforms.ToTensor(), download=True)
@@ -127,28 +127,23 @@ def test_accuracy():
     adv_img = (Variable(saved_state[1])).to(device)
     target_model = saved_state[2]
 
-    input_label_list = [] #list to store all prediction labels of input image
-    adv_label_list = [] #list to store adversarial output prediction
+    prediction_input = target_model(image)
+    index_input = prediction_input.data.cpu().numpy().argmax()
 
-    output = target_model(image)
-    index = output.data.cpu().numpy().argmax()
-    input_label_list.append(index)
+    prediction_output = target_model(adv_img)
+    index_output = prediction_output.data.cpu().numpy().argmax()
 
-    output = target_model(adv_img)
-    index = output.data.cpu().numpy().argmax()
-    adv_label_list.append(index)
 
-    # get most common prediction for input label
-    output_state[0] = max(input_label_list, key=input_label_list.count)
-    # get most common prediction for adversarial label
-    output_state[1] = max(adv_label_list, key=adv_label_list.count)
-    output_state[2] = adv_label_list
+    # store prediction for input label
+    output_state[0] = index_input
+    # store prediction for adversarial label
+    output_state[1] = index_output
 
     return output_state
      
 def get_label_accuracy(dataset, output_state):
     """
-    Get the labels of the images and the accuracy percentage of the adversarial label prediction
+    Get the labels of the images
 
     Args:
         dataset ([String]): dataset selected by user
@@ -159,7 +154,6 @@ def get_label_accuracy(dataset, output_state):
     """
     input_label = output_state[0]
     adv_label = output_state[1]
-    adv_label_list = output_state[2]
 
     # load target dataset
     if dataset == "cifar":
