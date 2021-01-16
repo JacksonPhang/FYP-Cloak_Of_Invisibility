@@ -4,12 +4,10 @@ from accepted_file_input import getAcceptInput
 from PyTorch.test_adversarial_examples import test_accuracy
 from PyTorch.test_adversarial_examples import get_label_accuracy
 from PyTorch.test_adversarial_examples import compare_display
-import getpass
 
 class Ui_FormTwo(QtWidgets.QWidget):
     """
     The second page of the User Interface
-    Do not edit unless you know what's up
     """
 
     def __init__(self, parent):
