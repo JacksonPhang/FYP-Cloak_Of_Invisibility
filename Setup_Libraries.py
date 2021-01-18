@@ -1,3 +1,6 @@
+"""
+Script to set up and install all required libraries
+"""
 import os
 
 def install():
