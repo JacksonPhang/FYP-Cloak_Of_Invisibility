@@ -42,7 +42,6 @@ class main_ui(QtWidgets.QWidget):
         ##############################################
 
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     main_ui_reference = main_ui()
     main_ui_reference.show()

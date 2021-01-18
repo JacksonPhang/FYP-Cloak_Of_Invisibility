@@ -8,7 +8,6 @@ from PyTorch.test_adversarial_examples import adversarial_attack
 class Ui_FormOne(QtWidgets.QWidget):
     """
     The first page of the User Interface
-    Do not edit unless you know what's up
     """
 
     def __init__(self, parent):
@@ -130,7 +129,7 @@ class Ui_FormOne(QtWidgets.QWidget):
 
         Changes the selection of the application to the second page
         """
-        # adversarial_attack(dataset, perturb_level, input_directory = None)
+        # Creates pop up informing user the perturbation is taking place
         popup = QtWidgets.QMessageBox()
         popup.setWindowTitle("Application Information")
         popup.setWindowModality(QtCore.Qt.ApplicationModal)
@@ -141,11 +140,23 @@ class Ui_FormOne(QtWidgets.QWidget):
         popup.exec_()
 
         # Backend functionality which will generate the perturbed image
-        adversarial_attack(self.getCheckBox(), self.perturbationSpinBox.value(), self.file_path)
-        self._parent.secondPageUI.setImage()
+        (return_code, rgb) = adversarial_attack(self.getCheckBox(), self.perturbationSpinBox.value(), self.file_path)
 
-        # Change to second page
-        self._parent.stackWidget.setCurrentIndex(1)
+        if return_code:
+            self._parent.secondPageUI.setImage()
+
+            # Change to second page
+            self._parent.stackWidget.setCurrentIndex(1)
+        else:
+            # Creates pop up informing user of error in backend regarding insufficient RGB channels of the image
+            error = QtWidgets.QMessageBox()
+            error.setWindowTitle("Application Information")
+            error.setWindowModality(QtCore.Qt.ApplicationModal)
+            error.setIcon(QtWidgets.QMessageBox.Critical)
+            error.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            error.setText("Application Error")
+            error.setInformativeText("Number of colour channels on the image expected to be 3 (RGB).\nReceived: " + str(rgb) + " (Grayscale)")
+            error.exec_()
 
     def browseButtonFunction(self):
         """

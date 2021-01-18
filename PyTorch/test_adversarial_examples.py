@@ -92,8 +92,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
         image.unsqueeze_(0)
         image.expand(3,3,size,size)
         if image.shape[1] != 3:
-            # print("Number of colour channels on the image expected to be 3 (RGB). Received", image.shape[1])
-            return False
+            return (False, image.shape[1])
     else:
         image.unsqueeze_(1)
     x = image.to(device)
@@ -118,7 +117,7 @@ def adversarial_attack(dataset, perturb_level, input_directory = None):
     saved_state[0] = image
     saved_state[2] = target_model
 
-    return True
+    return (True, image.shape[1])
 
 def test_accuracy():
     """
