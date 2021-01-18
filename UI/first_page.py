@@ -26,7 +26,7 @@ class Ui_FormOne(QtWidgets.QWidget):
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.imageUpload = MyQLabel(Form, self)
-        self.imageUpload.setPixmap(QtGui.QPixmap(os.path.dirname(os.path.abspath(__file__)) + "\\images\\Screenshot (106).png"))
+        self.imageUpload.setPixmap(QtGui.QPixmap(os.path.dirname(os.path.abspath(__file__)) + "/images/Screenshot (106).png"))
         self.imageUpload.setScaledContents(True)
         self.imageUpload.setObjectName("imageUpload")
         self.gridLayout_2.addWidget(self.imageUpload, 0, 0, 1, 2)
