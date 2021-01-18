@@ -2,8 +2,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import sys
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "\\UI")
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "\\PyTorch")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/UI")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/PyTorch")
 
 from UI.first_page import Ui_FormOne
 from UI.second_page import Ui_FormTwo

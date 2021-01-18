@@ -18,7 +18,7 @@ class Ui_FormTwo(QtWidgets.QWidget):
         """
         super().__init__()
         self._parent = parent
-        self.file_path = dirname(dirname(abspath(__file__))) + "\\PyTorch\\IO_images\\output_img.jpg"
+        self.file_path = dirname(dirname(abspath(__file__))) + "/PyTorch/IO_images/output_img.jpg"
         self.display = None
 
         Form = QtWidgets.QWidget()
